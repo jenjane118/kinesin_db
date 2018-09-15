@@ -67,7 +67,8 @@ CREATE table										mutation
            
 CREATE table										source_info
 (			source_id								VARCHAR(25)				NOT NULL,
-			transcript_id							VARCHAR(25)				NOT NULL,
+			transcript_id							VARCHAR(25)				DEFAULT 'N/A'
+																									NOT NULL,
             mutation_id								VARCHAR(45)				NOT NULL,
 			PRIMARY KEY (source_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (genomic_id) ON DELETE CASCADE
@@ -127,7 +128,7 @@ CREATE table										impact
 )ENGINE=InnoDB;
 
 
--- view created for user interface: includes only coding mutations for given gene (kinesin)
+-- materialised view created for user interface: includes only coding mutations for given gene (kinesin)
 -- in future can expand to create new views for each gene (kinesin) or for non-coding mutations (CNVs)
 CREATE VIEW vKif11_coding_mut AS 
 			SELECT 	g.gene_name, g.organism, m.genomic_id, cds, protein, mutation_type, consequence, domain, custom_score
