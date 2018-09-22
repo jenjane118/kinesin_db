@@ -4,7 +4,7 @@ SET SESSION sql_mode='STRICT_TRANS_TABLES';
 -- CREATE DATABASE							kinesin;
 USE kinesin;
 
-
+DROP TABLE IF EXISTS					tissue;
 DROP TABLE IF EXISTS					impact;
 DROP TABLE IF EXISTS					frequency;
 DROP TABLE IF EXISTS					source_info;
@@ -122,6 +122,16 @@ CREATE table										impact
 			fathhm_prediction					VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
 			clinvar_prediction					VARCHAR(25)				DEFAULT 'UNK'
+																									NOT NULL,
+			PRIMARY KEY (mutation_id),
+            FOREIGN KEY (mutation_id) REFERENCES mutation (genomic_id) ON DELETE CASCADE
+)ENGINE=InnoDB;
+
+CREATE table										tissue
+(			mutation_id								VARCHAR(45)				NOT NULL,
+			tissue_type								VARCHAR(100)				DEFAULT 'UNK'
+																									NOT NULL,
+			cancer_type							VARCHAR(100)				DEFAULT 'UNK'
 																									NOT NULL,
 			PRIMARY KEY (mutation_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (genomic_id) ON DELETE CASCADE
