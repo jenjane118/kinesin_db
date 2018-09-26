@@ -18,12 +18,12 @@ INSERT INTO 	gene (gene_name, strand, chrom_build, chrom_location, cds_length, h
 INSERT INTO mutation (genomic_id, coding, cds, mutation_type, consequence, protein, gene_name, organism)
 					VALUES ('10:92616824C>T', 'Y', '1120', 'substitution', 'missense', 'L374F', 'KIF11', 'homo sapiens');
                     
-INSERT INTO source_info (source_id, transcript_id, mutation_id)
-					VALUES ('COSM372619', 'ENST00000260731', '10:92616824C>T');
+INSERT INTO source_info (source_id, source_db, transcript_id, mutation_id)
+					VALUES ('COSM372619', 'COSMIC', 'ENST00000260731', '10:92616824C>T');
                     
 INSERT INTO	impact (mutation_id, fathhm_score, fathhm_prediction)
 					VALUES ('10:92616824C>T', '0.098623', 'pathogenic');
                     
 INSERT INTO tissue (mutation_id, tissue_type, cancer_type)
 					VALUES ('10:92616824C>T', 'lung', 'adenocarcinoma');
-                    
+                   

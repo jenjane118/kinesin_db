@@ -67,6 +67,7 @@ CREATE table										mutation
            
 CREATE table										source_info
 (			source_id								VARCHAR(25)				NOT NULL,
+			source_db								VARCHAR(25)				NOT NULL,
 			transcript_id							VARCHAR(25)				DEFAULT 'N/A'
 																									NOT NULL,
             mutation_id								VARCHAR(45)				NOT NULL,
