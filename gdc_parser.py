@@ -50,6 +50,7 @@ with open ('mutations.2018-10-03.json', 'r') as f:
 
 ## first index is the item number
 ## check that gene is KIF11
+mut_dict = {}
 my_gene = 'KIF11'
 x = 0
 for y in mutations:
@@ -60,18 +61,18 @@ for y in mutations:
         vep         = mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact']
         genomic     = mutations[x]['genomic_dna_change']
         mut_type    = mutations[x]['mutation_subtype']
-        #x +=1
     except IndexError:
         break
     x += 1
     if gene == my_gene:
         ## iterate thru json file and insert data for each mutation entry
         ## pymysql script 
-        print(genomic, aa_change, cons_type)
+        #print(genomic, aa_change, cons_type)
+        ## could make a dictionary of mutations and attributes. too many?
+        mut_dict[genomic] = (aa_change, cons_type, mut_type)       
     else:
         print('Gene not found!')
         sys.exit()
-print(x)
-## iterate thru json file and insert data for each mutation entry
-## pymysql script 
-
+print('The total number of mutations is: ', x)
+for x in mut_dict:
+    print(x, mut_dict[x])
