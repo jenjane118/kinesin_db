@@ -26,7 +26,8 @@ gdc_parser         SELF
 
 Revision History:
 =================
-
+22.01.19        PyMysql insert data, create dictionary      JJS
+     
 
 """
 
@@ -36,6 +37,7 @@ Revision History:
 import re
 import sys
 import pymysql
+import config_kinesin
 import json
 from pprint import pprint
 
@@ -43,36 +45,62 @@ from pprint import pprint
 
 # parse genomic data commons files
 
+#Connect to MySQL database
+cnx = pymysql.connect(host  =config_kinesin.database_config['dbhost'],
+                      port  =config_kinesin.database_config['port'],
+                      user  =config_kinesin.database_config['dbuser'],
+                      passwd=config_kinesin.database_config['dbpass'],
+                      db    =config_kinesin.database_config['dbname'])
+cursor = cnx.cursor(pymysql.cursors.DictCursor)
+
+
+
 with open ('mutations.2018-10-03.json', 'r') as f:
     mutations = json.load(f)
 
-#pprint(mutations)
 
 ## first index is the item number
 ## check that gene is KIF11
-mut_dict = {}
+mut_list = []
+mutation_dict ={}
 my_gene = 'KIF11'
 x = 0
 for y in mutations:
     try:
-        gene        = mutations[x]['consequence'][0]['transcript']['gene']['symbol']
-        aa_change   = mutations[x]['consequence'][0]['transcript']['aa_change']
-        cons_type   = mutations[x]['consequence'][0]['transcript']['consequence_type']
-        vep         = mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact']
-        genomic     = mutations[x]['genomic_dna_change']
-        mut_type    = mutations[x]['mutation_subtype']
+        gene_name       = str(mutations[x]['consequence'][0]['transcript']['gene']['symbol'])
+        protein         = str(mutations[x]['consequence'][0]['transcript']['aa_change'])
+        consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
+ #       vep            = mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact']
+        genomic_id      = str(mutations[x]['genomic_dna_change'])
+        ## eliminate 'g' in genomic_id
+        genomic_id      = genomic_id.replace('g.', '')
+        mutation_type   = str(mutations[x]['mutation_subtype'])
     except IndexError:
         break
-    x += 1
-    if gene == my_gene:
-        ## iterate thru json file and insert data for each mutation entry
-        ## pymysql script 
-        #print(genomic, aa_change, cons_type)
-        ## could make a dictionary of mutations and attributes. too many?
-        mut_dict[genomic] = (aa_change, cons_type, mut_type)       
+    if gene_name == my_gene:
+        x = x+1
+        mut_list = [genomic_id, 'y', ' ', mutation_type, consequence, protein, gene_name, 'homo sapiens']
+        if mut_list[0] != "None" and mut_list[4]=="missense_variant":
+            # create dictionary of missense mutations
+            mutation_dict[mut_list[5]] = mut_list[0:5]
+            # iterate thru json file and insert data for each missense mutation entry
+            sql_mutation = "INSERT INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
+                "gene_name, organism) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
+            rows = cursor.execute(sql_mutation, mut_list)
+
     else:
-        print('Gene not found!')
+        print('Gene not found')
         sys.exit()
-print('The total number of mutations is: ', x)
-for x in mut_dict:
-    print(x, mut_dict[x])
+
+cnx.commit()
+cnx.close()
+
+i = 0
+for h in sorted(mutation_dict):
+    i += 1
+    print(h, mutation_dict[h])
+print('The total number of missense mutations is: ', i )
+
+
+# next eliminate 'chr' before genomic_id, find info for cds column?
+# remember to delete all in mutation table on mysql database before running again
