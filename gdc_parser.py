@@ -1,6 +1,6 @@
 #!/usr/bin python3
 
-""" Cancer Genome Atlas Parser """
+""" Cancer Genome Atlas Parser/Mutation table """
 
 """
 Program:    gdc_parser
@@ -18,7 +18,7 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program parses gdc files for kinesin database population
+This program parses gdc files for kinesin database mutation table insertion
 
 Usage:
 ======
@@ -26,8 +26,8 @@ gdc_parser         SELF
 
 Revision History:
 =================
-22.01.19        PyMysql insert data, create dictionary      JJS
-     
+22.01.19        PyMysql insert data, create dictionary              JJS
+23.01.19        Rewrite into function (insertMutation)              JJS     
 
 """
 
@@ -39,68 +39,92 @@ import sys
 import pymysql
 import config_kinesin
 import json
-from pprint import pprint
+
+# ******************************************************************************
+def insertMutation(mutations):
+    """Inserts entry into mutation table.
+    Input               mutations           list of mutations
+    Output                                  inserted row into db
+    """
+    # Connect to MySQL database
+    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                          port=config_kinesin.database_config['port'],
+                          user=config_kinesin.database_config['dbuser'],
+                          passwd=config_kinesin.database_config['dbpass'],
+                          db=config_kinesin.database_config['dbname'])
+    cursor = cnx.cursor(pymysql.cursors.DictCursor)
+
+    sql_mutation = "INSERT INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
+                   "gene_name, organism) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
+
+    for x in mutations:
+        if x[0] != "None"  and x[4]=="missense_variant":
+            rows = cursor.execute(sql_mutation, x)
+
+    cnx.commit()
+    cnx.close()
+
+# ******************************************************************************
+def parseMutations(file):
+    """ Function to parse json files from Genomic Data Commons.
+    Input                   file                file of JSON mutations
+    Output                  mut_list            list of strings for mutation table
+    """
+
+    mut_list = []
+    mut_entry=[]
+    my_gene = 'KIF11'
+
+    ## first index is the item number, 'x'
+    x = 0
+    for k in file:
+        try:
+            gene_name       = str(mutations[x]['consequence'][0]['transcript']['gene']['symbol'])
+            protein         = str(mutations[x]['consequence'][0]['transcript']['aa_change'])
+            consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
+            genomic_id      = str(mutations[x]['genomic_dna_change'])
+            ## eliminate 'g' in genomic_id
+            genomic_id      = genomic_id.replace('g.', '')
+            mutation_type   = str(mutations[x]['mutation_subtype'])
+            x += 1
+        except Error as e:
+            print("Error", e)
+        # put all strings into a list
+        if gene_name == my_gene:            ## check that gene is KIF11
+            mut_entry        = [genomic_id, 'y', ' ', mutation_type, consequence, protein, gene_name, 'homo sapiens']
+            mut_list.append(mut_entry)
+
+    return mut_list
 
 # ******************************************************************************
 
-# parse genomic data commons files
+########## main ############
 
-#Connect to MySQL database
-cnx = pymysql.connect(host  =config_kinesin.database_config['dbhost'],
-                      port  =config_kinesin.database_config['port'],
-                      user  =config_kinesin.database_config['dbuser'],
-                      passwd=config_kinesin.database_config['dbpass'],
-                      db    =config_kinesin.database_config['dbname'])
-cursor = cnx.cursor(pymysql.cursors.DictCursor)
+if __name__ == "__main__":
 
+    with open ('mutations.2018-10-03.json', 'r') as f:
+        mutations = json.load(f)
 
+    gdc_mut = parseMutations(mutations)
 
-with open ('mutations.2018-10-03.json', 'r') as f:
-    mutations = json.load(f)
+    insertMutation(gdc_mut)
 
+    i=0
+    for k in gdc_mut:
+        if k[0] != "None" and k[4] == "missense_variant":
+            i += 1
+    print('The total number of missense mutations is: ', i )
 
-## first index is the item number
-## check that gene is KIF11
-mut_list = []
-mutation_dict ={}
-my_gene = 'KIF11'
-x = 0
-for y in mutations:
-    try:
-        gene_name       = str(mutations[x]['consequence'][0]['transcript']['gene']['symbol'])
-        protein         = str(mutations[x]['consequence'][0]['transcript']['aa_change'])
-        consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
- #       vep            = mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact']
-        genomic_id      = str(mutations[x]['genomic_dna_change'])
-        ## eliminate 'g' in genomic_id
-        genomic_id      = genomic_id.replace('g.', '')
-        mutation_type   = str(mutations[x]['mutation_subtype'])
-    except IndexError:
-        break
-    if gene_name == my_gene:
-        x = x+1
-        mut_list = [genomic_id, 'y', ' ', mutation_type, consequence, protein, gene_name, 'homo sapiens']
-        if mut_list[0] != "None" and mut_list[4]=="missense_variant":
-            # create dictionary of missense mutations
-            mutation_dict[mut_list[5]] = mut_list[0:5]
-            # iterate thru json file and insert data for each missense mutation entry
-            sql_mutation = "INSERT INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
-                "gene_name, organism) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
-            rows = cursor.execute(sql_mutation, mut_list)
-
-    else:
-        print('Gene not found')
-        sys.exit()
-
-cnx.commit()
-cnx.close()
-
-i = 0
-for h in sorted(mutation_dict):
-    i += 1
-    print(h, mutation_dict[h])
-print('The total number of missense mutations is: ', i )
+    f.close()
 
 
-# next eliminate 'chr' before genomic_id, find info for cds column?
+# how to find info for cds column?
 # remember to delete all in mutation table on mysql database before running again
+
+# checkout this tutorial: http://www.mysqltutorial.org/python-mysql-insert/
+# make into function for inserting into table
+# def main():
+#     INSERT
+#     INTO
+#     mutation(genomic, coding, cds, mutation_type, consequence, protein, gene_name, organism)
+#     					VALUES ('10:92616824C>T', 'Y', '1120', 'substitution', 'missense', 'L374F', 'KIF11', 'homo sapiens');
