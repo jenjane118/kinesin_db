@@ -46,7 +46,7 @@ CREATE table										gene
 
 
 CREATE table										mutation
-(			genomic  								VARCHAR(45)				NOT NULL,
+(			genomic  								VARCHAR(100)				NOT NULL,
             coding										CHAR(1)							NOT NULL,
             cds											VARCHAR(10)				DEFAULT 'N/A'
 																									NOT NULL,
@@ -54,7 +54,7 @@ CREATE table										mutation
 																									NOT NULL,
 			consequence							VARCHAR(100)				DEFAULT 'UNK'
 																									NOT NULL,
-            protein										VARCHAR(10)				NOT NULL,
+            protein										VARCHAR(40)				NOT NULL,
 			gene_name								VARCHAR(100)				NOT NULL,
             organism									VARCHAR(100)				NOT NULL,
             domain									VARCHAR(100)				DEFAULT 'UNK'
@@ -65,9 +65,9 @@ CREATE table										mutation
            
            
 CREATE table										source_info
-(			source_id								VARCHAR(25)				NOT NULL,
+(			source_id								VARCHAR(100)				NOT NULL,
 			source_db								VARCHAR(25)				NOT NULL,
-			transcript_id							VARCHAR(25)				DEFAULT 'N/A'
+			transcript_id							VARCHAR(100)				DEFAULT 'N/A'
 																									NOT NULL,
             mutation_id								VARCHAR(45)				NOT NULL,
 			PRIMARY KEY (source_id),
