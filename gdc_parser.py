@@ -18,7 +18,7 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program parses gdc files for kinesin database mutation table insertion
+This program parses gdc files (https://portal.gdc.cancer.gov) for kinesin database population.
 
 Usage:
 ======
@@ -27,7 +27,7 @@ gdc_parser         SELF
 Revision History:
 =================
 V1.2    22.01.19        PyMysql insert data, create dictionary      By: JJS
-V1.3    23.01.19        Rewrite into function (insertMutation)          JJS     
+V1.3    23.01.19        Rewrite into functions                          JJS     
 V1.4    23.01.19        Added functions for source and impact           JJS
                         tables
 """
@@ -78,10 +78,10 @@ def insertSource(mutations):
                           db=config_kinesin.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_source = "INSERT INTO source_info (source_id, source_db, transcript_id, mutation_id) VALUES(%s,%s,%s,%s)"
+    sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
 
     for x in mutations:
-        if x[3] != "None": #  and x[4]=="missense_variant":
+        if x[2] != "None": #  and x[4]=="missense_variant":
             rows = cursor.execute(sql_source, x)
 
     cnx.commit()
@@ -140,7 +140,6 @@ def parseMutations(file):
     for k in file:
         try:
             gene_name       = str(mutations[x]['consequence'][0]['transcript']['gene']['symbol'])
-            transcript      = str(mutations[x]['consequence'][0]['transcript']['gene']['gene_id'])
             protein         = str(mutations[x]['consequence'][0]['transcript']['aa_change'])
             consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
             genomic_id      = str(mutations[x]['genomic_dna_change'])
@@ -163,7 +162,7 @@ def parseMutations(file):
         # put all strings into a list
         if gene_name == my_gene:            ## check that gene is KIF11
             mut_entry       = [genomic_id, 'y', ' ', mutation_type, consequence, protein, gene_name, 'homo sapiens']
-            source_entry    = [source_id, source_db, transcript, protein]
+            source_entry    = [source_id, source_db, protein]
             impact_entry = [protein, vep, sift, polyphen]
             impact_list.append(impact_entry)
             mut_list.append(mut_entry)
@@ -200,13 +199,5 @@ if __name__ == "__main__":
     f.close()
 
 
-# how to find info for cds column?
-# remember to delete all in mutation table on mysql database before running again
 
-# checkout this tutorial: http://www.mysqltutorial.org/python-mysql-insert/
-# make into function for inserting into table
-# def main():
-#     INSERT
-#     INTO
-#     mutation(genomic, coding, cds, mutation_type, consequence, protein, gene_name, organism)
-#     					VALUES ('10:92616824C>T', 'Y', '1120', 'substitution', 'missense', 'L374F', 'KIF11', 'homo sapiens');
+
