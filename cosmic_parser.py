@@ -6,7 +6,7 @@
 Program:    cosmic_parser
 File:       cosmic_parser.py
 Version:    1.0
-Date:       03.10.18
+Date:       23.01.19
 Function:   Parse cosmic files for kinesin database
 Author:     Jennifer J. Stiens
             j.j.stiens@gmail.com
@@ -26,7 +26,9 @@ gdc_parser         SELF
 
 Revision History:
 =================
-
+V 1.0               Initial version                                 By: JJS
+V 1.2               Includes file opening and gene specification        JJS
+                    as function arguments.            
                       
 """
 
@@ -42,54 +44,52 @@ import re
 
 # ******************************************************************************
 
-def cosmicParser(file):
-    """Function to parse mutation files from COSMIC database
+def cosmicParser(my_gene, csv_file):
+    """Function to parse mutation files from csv files from COSMIC database
     Input               file                    csv file download
     Output              id_list                 list of mutation_id's
                         mutation_dict           dictionary of attributes of mutation and impact
-                        source_list             cosmic mutation entries for source table
 
     """
-    mut_list        = []
+
     mut_entry       = []
     mutation_dict   = {}
 
-    my_gene = 'KIF11'
+    # open csv file
+    with open(csv_file) as file:
+        csv_reader = csv.reader(file, delimiter=',')
+        # parse out info into attribute names
+        for row in csv_reader:
+            try:
+                # mutation table  (only include info not available in gdc files)
+                gene_name       = row[0]
+                #genomic_id      = row[1]
+                #coding          = 'y'
+                protein         = row[18]
+                # eliminate 'p.'
+                protein         = protein.replace('p.', '')
+                cds             = row[17]
+                #mutation_type   = row[19]           # need all before hyphen
+                #consequence     = row[19]           # after the hyphen
+                #organism        = 'Homo sapiens'
+                #domain          = ' '               # calculate later
 
-    id_entry    = []
-    id_list     = []
+                # source_info table
+                source_db       = 'COSMIC'
+                source_id       = row[16]
+                # impact table
+                fathhm_score    = row[28]
+                fathhm_pred     = row[27]
 
-    # parse out info into attribute names
-    x = 0
-    for row in file:
-        try:
-            # mutation table  (only include info not available in gdc files)
-            gene_name       = row[0]
-            #genomic_id      = row[1]
-            #coding          = 'y'
-            protein         = row[18]
-            # eliminate 'p.'
-            protein         = protein.replace('p.', '')
-            cds             = row[17]
-            #mutation_type   = row[19]           # need all before hyphen
-            #consequence     = row[19]           # after the hyphen
-            #organism        = 'Homo sapiens'
-            #domain          = ' '               # calculate later
-            # source_info table
-            source_db       = 'COSMIC'
-            source_id       = row[16]
-            # impact table
-            fathhm_score    = row[28]
-            fathhm_pred     = row[27]
-            # tissue table
-            tissue_type     = row[7]
-            cancer_type     = row[12]
-        except Error as e:
-            print("Error", e)
+                # tissue table
+                tissue_type     = row[7]
+                cancer_type     = row[12]
+            except Error as e:
+                print("Error", e)
 
-        # make dictionary to fill in missing attribute fields in mutation table before insertion
-        if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11 don't include ambiguous amino acid changes
-            mutation_dict[protein] = (cds, source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
+            # make dictionary to fill in missing attribute fields in mutation table before insertion
+            if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11 don't include ambiguous amino acid changes
+                mutation_dict[protein] = (cds, source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
                                             cancer_type)
 
     return mutation_dict
@@ -99,22 +99,9 @@ def cosmicParser(file):
 
 if __name__ == "__main__":
 
-    with open('V87_38_MUTANT.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        # to determine index number of columns in csv file
-        # line_count = 0
-        # for row in csv_reader:
-        #     i = 0
-        #     if line_count == 0:
-        #         for r in row:
-        #             print(i, r)
-        #             i +=1
-        #         line_count += 1
-        #     else:
-        #         line_count += 1
-        cosmic_dict = cosmicParser(csv_reader)
-        for x in cosmic_dict:
-            print(x, cosmic_dict[x])
+    cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    for x in cosmic_dict:
+        print(x, cosmic_dict[x])
 
 
 # ******************************************************************************
