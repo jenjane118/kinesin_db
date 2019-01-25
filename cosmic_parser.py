@@ -88,7 +88,7 @@ def cosmicParser(my_gene, csv_file):
                 print("Error", e)
 
             # make dictionary to fill in missing attribute fields in mutation table before insertion
-            if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11 don't include ambiguous amino acid changes
+            if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
                 mutation_dict[protein] = (cds, source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
                                             cancer_type)
 

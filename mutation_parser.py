@@ -22,7 +22,7 @@ This program parses gdc files (https://portal.gdc.cancer.gov) for kinesin databa
 
 Usage:
 ======
-gdc_parser         SELF
+mutation_parser         SELF
 
 Revision History:
 =================
@@ -32,7 +32,8 @@ V1.4    23.01.19        Added functions for source and impact           JJS
                         tables
 V1.5    25.01.19        Added file opening and gene specification to    JJS
                         parseMutation function. Removed insert          
-                        functions to a new module. Renamed module.
+                        functions to a new module. Renamed module 
+                        (previously gdc_parser).
 """
 
 # ******************************************************************************
@@ -43,84 +44,11 @@ import sys
 import pymysql
 import config_kinesin
 import json
+import csv
+
 
 # ******************************************************************************
-def insertMutation(mutations):
-    """Inserts entry into mutation table.
-    Input               mutations           list of mutations
-    Output                                  inserted row into db
-    """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
-    cursor = cnx.cursor(pymysql.cursors.DictCursor)
-
-    sql_mutation = "INSERT INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
-                   "gene_name, organism) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)"
-
-    for x in mutations:
-        if x[5] != "None": #  and x[4]=="missense_variant":
-            rows = cursor.execute(sql_mutation, x)
-
-    cnx.commit()
-    cnx.close()
-# ******************************************************************************
-def insertSource(mutations):
-    """Inserts entry into source table.
-    Input               mutations           list of mutations
-    Output                                  inserted row into db
-    """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
-    cursor = cnx.cursor(pymysql.cursors.DictCursor)
-
-    sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
-
-    for x in mutations:
-        if x[2] != "None": #  and x[4]=="missense_variant":
-            rows = cursor.execute(sql_source, x)
-
-    cnx.commit()
-    cnx.close()
-# ******************************************************************************
-
-def insertImpact(impact_list):
-    """Inserts entry into impact table.
-    Input               impact_list             list of entries for impact table
-    Output                                      inserted row into impact table
-    """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
-    cursor = cnx.cursor(pymysql.cursors.DictCursor)
-
-    # sql_impact = "INSERT INTO impact (mutation_id, custom_score, vep, sift_score, sift_prediction, " \
-    #              "polyphen_score, polyphen_prediction, fathhm_score, fathhm_prediction, " \
-    #              "clinvar_prediction) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    #
-    sql_impact = "INSERT INTO impact (mutation_id, vep, sift_prediction, polyphen_prediction) " \
-                 "VALUES(%s,%s,%s,%s)"
-
-
-    for x in impact_list:
-        if x[0] != "None":
-            rows = cursor.execute(sql_impact, x)
-
-    cnx.commit()
-    cnx.close()
-
-# ******************************************************************************
-def parseMutations(gene, json_file):
+def parseGDC(gene, json_file):
     """ Function to parse json files from Genomic Data Commons.
     Input                   file                file of JSON mutations
     Output                  mut_list  [0]       list of strings for mutation table
@@ -181,31 +109,101 @@ def parseMutations(gene, json_file):
     return mut_list, source_list, impact_list
 
 # ******************************************************************************
+def cosmicParser(my_gene, csv_file):
+    """Function to parse mutation files from csv files from COSMIC database
+    Input               file                    csv file download
+    Output              id_list                 list of mutation_id's
+                        mutation_dict           dictionary of attributes of mutation and impact
 
+    """
+
+    mut_entry       = []
+    mutation_dict   = {}
+
+    # open csv file
+    with open(csv_file) as file:
+        csv_reader = csv.reader(file, delimiter=',')
+        # parse out info into attribute names
+        for row in csv_reader:
+            try:
+                # mutation table  (only include info not available in gdc files)
+                gene_name       = row[0]
+                genomic_id      = row[1]
+                coding          = 'y'
+                protein         = row[18]
+                # eliminate 'p.'
+                protein         = protein.replace('p.', '')
+                cds             = row[17]
+                mutation_type   = row[19]           # need all before hyphen
+                consequence     = row[19]           # after the hyphen
+                organism        = 'Homo sapiens'
+                domain          = ' '               # calculate later
+
+                # source_info table
+                source_db       = 'COSMIC'
+                source_id       = row[16]
+                # impact table
+                fathhm_score    = row[28]
+                fathhm_pred     = row[27]
+
+                # tissue table
+                tissue_type     = row[7]
+                cancer_type     = row[12]
+            except Error as e:
+                print("Error", e)
+
+            # make dictionary to fill in missing attribute fields in mutation table before insertion
+            if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
+                mutation_dict[protein] = (genomic_id, coding, cds, mutation_type, consequence, organism, domain,
+                                          source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
+                                          cancer_type, gene_name)
+    file.close()
+    return mutation_dict
+
+# *************************************************************************************
+def combineImpact(gene, json_file, csv_file):
+    """Updates gdc impact table with attributes from Cosmic csv file.
+    Input           gene                gene name
+                    json_file           gdc file in json format
+                    csv_file            cosmic file in csv format
+    Output          total_impact        updated impact list for insertion
+    """
+    gdc_att = parseGDC(gene, json_file)
+    cosmic_mutation = cosmicParser(gene, csv_file)
+    gdc_impact = gdc_att[2]
+    # add fathhm attributes from cosmic file to impact list
+    y = []
+    total_impact = []
+    for x in gdc_impact:
+        if x[0] in cosmic_mutation:
+            k = x[0]
+            y = [x[0], x[1], x[2], x[3], cosmic_mutation[k][9], cosmic_mutation[k][10]]
+            total_impact.append(y)
+    # will only insert impact attributes for mutations in cosmic AND gdc. Will need to insert gdc seperately
+    # with 'insert ignore'
+    return  total_impact
+
+# *************************************************************************************
 ########## main ############
 
 if __name__ == "__main__":
 
-    gdc_att    = parseMutations('KIF11', 'mutations.2018-10-03.json')
+    gdc_att    = parseGDC('KIF11', 'mutations.2018-10-03.json')
     gdc_mut    = gdc_att[0]
     gdc_source = gdc_att[1]
     gdc_impact = gdc_att[2]
+    #print(gdc_att[0])
 
-    print(gdc_att[0])
-
-    # insertMutation(gdc_mut)
-    # insertSource(gdc_source)
-    # insertImpact(gdc_impact)
-
-    i=0
-    for k in gdc_mut:
-        if k[5] != "None": # and k[4] == "missense_variant":
-            i += 1
-        #print(k)
-
-    print('The total number of mutations is: ', i )
-
-
+    cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    t_impact = combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
+    i = 0
+    #for x in gdc_mut:
+        #if x[5] != "None":  # and x[4] == "missense_variant":
+           # i += 1
+    for x in cosmic_dict:
+        i += 1
+    print(t_impact)
+    print('The total number of mutations is: ', i)
 
 
 
