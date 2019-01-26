@@ -162,7 +162,7 @@ def cosmicParser(my_gene, csv_file):
 
 # *************************************************************************************
 def combineImpact(gene, json_file, csv_file):
-    """Updates gdc impact table with attributes from Cosmic csv file.
+    """Creates list of combined impact attributes with attributes from GDC .json and Cosmic .csv files.
     Input           gene                gene name
                     json_file           gdc file in json format
                     csv_file            cosmic file in csv format
@@ -179,8 +179,8 @@ def combineImpact(gene, json_file, csv_file):
             k = x[0]
             y = [x[0], x[1], x[2], x[3], cosmic_mutation[k][9], cosmic_mutation[k][10]]
             total_impact.append(y)
-    # will only insert impact attributes for mutations in cosmic AND gdc. Will need to insert gdc seperately
-    # with 'insert ignore'
+    # will only insert impact attributes for mutations found in cosmic AND gdc
+    # will need to insert gdc separately
     return  total_impact
 
 # *************************************************************************************
@@ -196,14 +196,17 @@ if __name__ == "__main__":
 
     cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
     t_impact = combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
+    #print(t_impact)
+
     i = 0
-    #for x in gdc_mut:
-        #if x[5] != "None":  # and x[4] == "missense_variant":
-           # i += 1
+    j = 0
+    for x in gdc_mut:
+        if x[5] != "None":  # and x[4] == "missense_variant":
+            i += 1
     for x in cosmic_dict:
-        i += 1
-    print(t_impact)
-    print('The total number of mutations is: ', i)
+        j += 1
+
+    print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
 
