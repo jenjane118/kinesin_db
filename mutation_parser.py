@@ -126,7 +126,6 @@ def cosmicParser(my_gene, csv_file):
         # parse out info into attribute names
         for row in csv_reader:
             try:
-                # mutation table  (only include info not available in gdc files)
                 gene_name       = row[0]
                 genomic_id      = row[1]
                 coding          = 'y'
@@ -134,8 +133,7 @@ def cosmicParser(my_gene, csv_file):
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
                 cds             = row[17]
-                mutation_type   = row[19]           # need all before hyphen
-                consequence     = row[19]           # after the hyphen
+                description     = row[19]           # parse out type and consequence below
                 organism        = 'Homo sapiens'
                 domain          = ' '               # calculate later
 
@@ -151,6 +149,15 @@ def cosmicParser(my_gene, csv_file):
                 cancer_type     = row[12]
             except Error as e:
                 print("Error", e)
+
+            # use regex to parse mutation type and consequence from overall mutation description
+            p  = re.compile(r'(^\w+)\s-\s(.+$)')
+            it = p.finditer(description)
+            for match in it:
+                mutation_type = match.group(1)  # need all before hyphen
+                consequence   = match.group(2)  # after the hyphen
+                # makes more consistent terminology between databases
+                consequence = consequence.replace('coding silent', 'synonymous')
 
             # make dictionary to fill in missing attribute fields in mutation table before insertion
             if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
@@ -188,24 +195,24 @@ def combineImpact(gene, json_file, csv_file):
 
 if __name__ == "__main__":
 
-    gdc_att    = parseGDC('KIF11', 'mutations.2018-10-03.json')
-    gdc_mut    = gdc_att[0]
-    gdc_source = gdc_att[1]
-    gdc_impact = gdc_att[2]
-    #print(gdc_att[0])
+    # gdc_att    = parseGDC('KIF11', 'mutations.2018-10-03.json')
+    # gdc_mut    = gdc_att[0]
+    # gdc_source = gdc_att[1]
+    # gdc_impact = gdc_att[2]
+    # #print(gdc_att[0])
 
     cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
-    t_impact = combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
+    #t_impact = combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
     #print(t_impact)
 
     i = 0
     j = 0
-    for x in gdc_mut:
-        if x[5] != "None":  # and x[4] == "missense_variant":
-            i += 1
+    # for x in gdc_mut:
+    #     if x[5] != "None":  # and x[4] == "missense_variant":
+    #         i += 1
     for x in cosmic_dict:
         j += 1
-
+        print(x, cosmic_dict[x])
     print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
