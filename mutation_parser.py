@@ -66,7 +66,7 @@ def parseGDC(gene, json_file):
     source_db   = 'GDC'
     my_gene     = 'KIF11'
 
-    with open ('mutations.2018-10-03.json', 'r') as f:
+    with open (json_file) as f:
         mutations = json.load(f)
         ## first index is the item number, 'x'
         x = 0
@@ -96,6 +96,13 @@ def parseGDC(gene, json_file):
                 x += 1
             except Error as e:
                 print("Error", e)
+
+            # make terminology more consistent between databases
+            p = re.compile(r'_variant$')
+            consequence = p.sub('', consequence)
+            q = re.compile(r'^Single base')
+            mutation_type = q.sub('', mutation_type)
+            
             # put all strings into lists for each table
             if gene_name == my_gene:            ## check that gene is KIF11
                 mut_entry       = [genomic_id, coding, cds, mutation_type, consequence, protein, gene_name, organism, domain]
@@ -195,24 +202,25 @@ def combineImpact(gene, json_file, csv_file):
 
 if __name__ == "__main__":
 
-    # gdc_att    = parseGDC('KIF11', 'mutations.2018-10-03.json')
+    gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
     # gdc_mut    = gdc_att[0]
     # gdc_source = gdc_att[1]
     # gdc_impact = gdc_att[2]
     # #print(gdc_att[0])
 
-    cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
-    #t_impact = combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
+    #cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    #t_impact = combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
     #print(t_impact)
 
     i = 0
     j = 0
-    # for x in gdc_mut:
-    #     if x[5] != "None":  # and x[4] == "missense_variant":
-    #         i += 1
-    for x in cosmic_dict:
-        j += 1
-        print(x, cosmic_dict[x])
+    for x in gdc_att[0]:
+       # if x[5] != "None":  # and x[4] == "missense_variant":
+            #i += 1
+        print(x[4], x[3])
+    #for x in cosmic_dict:
+    #    j += 1
+        #print(x, cosmic_dict[x])
     print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
