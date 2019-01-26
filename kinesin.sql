@@ -48,7 +48,7 @@ CREATE table										gene
 CREATE table										mutation
 (			genomic  								VARCHAR(100)				NOT NULL,
             coding										CHAR(1)							NOT NULL,
-            cds											VARCHAR(10)				DEFAULT 'N/A'
+            cds											VARCHAR(20)				DEFAULT 'N/A'
 																									NOT NULL,
 			mutation_type							VARCHAR(100)				DEFAULT 'UNK'
 																									NOT NULL,
