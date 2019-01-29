@@ -100,8 +100,13 @@ def parseGDC(gene, json_file):
             # make terminology more consistent between databases
             p = re.compile(r'_variant$')
             consequence = p.sub('', consequence)
+            s = re.compile(r'stop_gained')
+            consequence = s.sub('', consequence)
             q = re.compile(r'^Single base')
             mutation_type = q.sub('', mutation_type)
+            r = re.compile(r'^Small')
+            mutation_type = r.sub('', mutation_type)
+
 
             # put all strings into lists for each table
             if gene_name == my_gene:            ## check that gene is KIF11
@@ -136,11 +141,11 @@ def cosmicParser(my_gene, csv_file):
                 gene_name       = row[0]
                 genomic_id      = row[1]
                 coding          = 'y'
-                protein         = row[18]
+                protein         = row[18].lower()
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
                 cds             = row[17]
-                description     = row[19]           # parse out type and consequence below
+                description     = row[19].lower()          # parse out type and consequence below
                 organism        = 'Homo sapiens'
                 domain          = ' '               # calculate later
 
@@ -202,26 +207,26 @@ def combineImpact(gene, json_file, csv_file):
 
 if __name__ == "__main__":
 
-    gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
-    # gdc_mut    = gdc_att[0]
+    #gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
+    #gdc_mut    = gdc_att[0]
     # gdc_source = gdc_att[1]
     # gdc_impact = gdc_att[2]
     # #print(gdc_att[0])
 
-    #cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
     #t_impact = combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
     #print(t_impact)
 
     i = 0
     j = 0
-    for x in gdc_att[0]:
+    #for x in gdc_att[0]:
        # if x[5] != "None":  # and x[4] == "missense_variant":
             #i += 1
-        print(x[4], x[3])
-    #for x in cosmic_dict:
+     #   print(x[4], x[3])
+    for x in cosmic_dict:
     #    j += 1
-        #print(x, cosmic_dict[x])
-    print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
+        print(x, cosmic_dict[x])
+    #print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
 
