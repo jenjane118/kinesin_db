@@ -77,7 +77,8 @@ def parseGDC(gene, json_file):
                 consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
                 genomic_id      = str(mutations[x]['genomic_dna_change'])
                 ## eliminate 'g' in genomic_id
-                genomic_id      = genomic_id.replace('g.', '')
+                #genomic_id      = genomic_id.replace('g.', '')
+                #genomic_id      = genomic_id.replace('chr', '')
                 source_id       = str(mutations[x]['ssm_id'])
                 mutation_type   = str(mutations[x]['mutation_subtype'])
                 vep = str(mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact'])
@@ -97,14 +98,20 @@ def parseGDC(gene, json_file):
             except Error as e:
                 print("Error", e)
 
+            # parse out genomic_id
+            t = re.compile(r'^chr(10:)g.(\d{8})(.+)')
+            it = t.finditer(genomic_id)
+            for match in it:
+                genomic_id  = str(match.group(1) + match.group(2))
+                cds         = str(match.group(3))
             # make terminology more consistent between databases
             p = re.compile(r'_variant$')
             consequence = p.sub('', consequence)
             s = re.compile(r'stop_gained')
             consequence = s.sub('', consequence)
-            q = re.compile(r'^Single base')
+            q = re.compile(r'^Single base ')
             mutation_type = q.sub('', mutation_type)
-            r = re.compile(r'^Small')
+            r = re.compile(r'^Small ')
             mutation_type = r.sub('', mutation_type)
 
 
@@ -139,7 +146,7 @@ def cosmicParser(my_gene, csv_file):
         for row in csv_reader:
             try:
                 gene_name       = row[0]
-                genomic_id      = row[1]
+                genomic_id      = row[23]
                 coding          = 'y'
                 protein         = row[18].lower()
                 # eliminate 'p.'
@@ -162,12 +169,18 @@ def cosmicParser(my_gene, csv_file):
             except Error as e:
                 print("Error", e)
 
+            # only use initial genomic position coordinate
+            q  = re.compile(r'^(10:\w+)-\w?')
+            it = q.finditer(genomic_id)
+            for match in it:
+                genomic_id = match.group(1)
+
             # use regex to parse mutation type and consequence from overall mutation description
             p  = re.compile(r'(^\w+)\s-\s(.+$)')
             it = p.finditer(description)
             for match in it:
-                mutation_type = match.group(1)  # need all before hyphen
-                consequence   = match.group(2)  # after the hyphen
+                mutation_type = str(match.group(1))  # need all before hyphen
+                consequence   = str(match.group(2))  # after the hyphen
                 # makes more consistent terminology between databases
                 consequence = consequence.replace('coding silent', 'synonymous')
 
@@ -207,8 +220,8 @@ def combineImpact(gene, json_file, csv_file):
 
 if __name__ == "__main__":
 
-    #gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
-    #gdc_mut    = gdc_att[0]
+    gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
+    gdc_mut    = gdc_att[0]
     # gdc_source = gdc_att[1]
     # gdc_impact = gdc_att[2]
     # #print(gdc_att[0])
@@ -219,13 +232,13 @@ if __name__ == "__main__":
 
     i = 0
     j = 0
-    #for x in gdc_att[0]:
+    for x in gdc_att[0]:
        # if x[5] != "None":  # and x[4] == "missense_variant":
             #i += 1
-     #   print(x[4], x[3])
-    for x in cosmic_dict:
+        print(x[0], x[3])
+    #for x in cosmic_dict:
     #    j += 1
-        print(x, cosmic_dict[x])
+        #print(x, cosmic_dict[x][3])
     #print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
