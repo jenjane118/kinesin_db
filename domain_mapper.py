@@ -57,7 +57,7 @@ def domainMapper(mutation):
         else:
             domain_dict[x] = 'UNK'
 
-    # find residue number
+    #find residue number
     residue_num = ''
     r = re.compile(r'[A-Z]+(\d+)[^0-9]')
     it = r.finditer(mutation)

@@ -75,11 +75,9 @@ def parseGDC(gene, json_file):
             try:
                 gene_name       = str(mutations[x]['consequence'][0]['transcript']['gene']['symbol'])
                 protein         = str(mutations[x]['consequence'][0]['transcript']['aa_change'])
+                res_num         = ''
                 consequence     = str(mutations[x]['consequence'][0]['transcript']['consequence_type'])
                 genomic_id      = str(mutations[x]['genomic_dna_change'])
-                ## eliminate 'g' in genomic_id
-                #genomic_id      = genomic_id.replace('g.', '')
-                #genomic_id      = genomic_id.replace('chr', '')
                 source_id       = str(mutations[x]['ssm_id'])
                 mutation_type   = str(mutations[x]['mutation_subtype'])
                 vep = str(mutations[x]['consequence'][0]['transcript']['annotation']['vep_impact'])
@@ -105,6 +103,11 @@ def parseGDC(gene, json_file):
             for match in it:
                 genomic_id  = str(match.group(1) + match.group(2))
                 cds         = str(match.group(3))
+            # parse out amino acid residue number
+            u = re.compile(r'[A-Z]+(\d+)[^0-9]')
+            it = u.finditer(protein)
+            for match in it:
+                res_num = str(match.group(1))
             # make terminology more consistent between databases
             p = re.compile(r'_variant$')
             consequence = p.sub('', consequence)
@@ -118,7 +121,7 @@ def parseGDC(gene, json_file):
 
             # put all strings into lists for each table
             if gene_name == my_gene:            ## check that gene is KIF11
-                mut_entry       = [genomic_id, coding, cds, mutation_type, consequence, protein, gene_name, organism, domain]
+                mut_entry       = [protein, res_num, genomic_id, coding, cds, mutation_type, consequence, gene_name, organism, domain]
                 source_entry    = [source_id, source_db, protein]
                 impact_entry    = [protein, vep, sift, polyphen]
                 impact_list.append(impact_entry)
@@ -152,6 +155,7 @@ def cosmicParser(my_gene, csv_file):
                 protein         = row[18]
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
+                res_num          = ''
                 cds             = row[17]
                 cds             = cds.replace('c.', '')
                 description     = row[19].lower()          # parse out type and consequence below
@@ -176,7 +180,11 @@ def cosmicParser(my_gene, csv_file):
             it = q.finditer(genomic_id)
             for match in it:
                 genomic_id = match.group(1)
-
+            # parse out amino acid residue number
+            u = re.compile(r'[A-Z]+(\d+)[^0-9]')
+            it = u.finditer(protein)
+            for match in it:
+                res_num = str(match.group(1))
             # use regex to parse mutation type and consequence from overall mutation description
             p  = re.compile(r'(^\w+)\s-\s(.+$)')
             it = p.finditer(description)
@@ -188,7 +196,7 @@ def cosmicParser(my_gene, csv_file):
 
             # make dictionary to fill in missing attribute fields in mutation table before insertion
             if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
-                mutation_dict[protein] = (genomic_id, coding, cds, mutation_type, consequence, organism, domain,
+                mutation_dict[protein] = (res_num, genomic_id, coding, cds, mutation_type, consequence, organism, domain,
                                           source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
                                           cancer_type, gene_name)
     file.close()
@@ -235,13 +243,13 @@ if __name__ == "__main__":
 
     i = 0
     j = 0
-    #for x in gdc_mut:
-        #if x[5] != "None":  # and x[4] == "missense_variant":
+    for x in gdc_mut:
+        if x[0] != "None":  # and x[4] == "missense_variant":
         #    i += 1
-        #print(x[8])
+            print(x[1])
     for x in cosmic_dict:
         j += 1
-        print(cosmic_dict[x][6])
+        print(cosmic_dict[x][0])
    # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 

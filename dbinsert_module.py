@@ -62,7 +62,7 @@ def insertCosmicSource(mutation_dict):
     # extract values from mutation_dict and put in list
     for k in mutation_dict:
         if k != "None":
-            source_line = [mutation_dict[k][8], mutation_dict[k][7], k]
+            source_line = [mutation_dict[k][9], mutation_dict[k][8], k]
             source_list.append(source_line)
 
     # use list to populate source table
@@ -86,11 +86,11 @@ def insertMutation(mutations):
                           db=config_kinesin.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_mutation = "INSERT INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
-                   "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    sql_mutation = "INSERT INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
+                   "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     gdc_mut = mutations[0]
     for x in gdc_mut:
-        if x[5] != "None": #  and x[4]=="missense_variant":
+        if x[0] != "None": #  and x[4]=="missense_variant":
             rows = cursor.execute(sql_mutation, x)
 
     cnx.commit()
@@ -192,7 +192,7 @@ def insertTissue(mutation_dict):
     # extract values from mutation_dict and put in list
     for k in mutation_dict:
         if k != "None":
-            tissue_line = [k, mutation_dict[k][11], mutation_dict[k][12]]
+            tissue_line = [k, mutation_dict[k][12], mutation_dict[k][13]]
             tissue_list.append(tissue_line)
 
     # use list to populate tissue table
@@ -218,17 +218,17 @@ def insertCosmicMutation(mutation_dict):
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     # insert mutation attributes from cosmic, will replace earlier entry with more complete info from cosmic
-    sql_mutation    = "REPLACE INTO mutation (genomic, coding, cds, mutation_type, consequence, protein, " \
-                         "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    sql_mutation    = "REPLACE INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
+                         "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
     mutation_entry  = []
     mutation_list   = []
 
     for k in mutation_dict:
         if k != "None":
-            mutation_entry = [mutation_dict[k][0], mutation_dict[k][1], mutation_dict[k][2], mutation_dict[k][3],
-                              mutation_dict[k][4], k, mutation_dict[k][13], mutation_dict[k][5],
-                              mutation_dict[k][6]]
+            mutation_entry = [k, mutation_dict[k][0], mutation_dict[k][1], mutation_dict[k][2], mutation_dict[k][3],
+                              mutation_dict[k][4], mutation_dict[k][5], mutation_dict[k][14],
+                              mutation_dict[k][6], mutation_dict[k][7]]
             # insert cosmic impact info for mutations not in gdc
             mutation_list.append(mutation_entry)
 
@@ -265,7 +265,7 @@ def insertCosmicImpact(mutation_dict):
 
     for k in mutation_dict:
         if k != "None":
-            impact_entry   = [k, mutation_dict[k][9], mutation_dict[k][10]]
+            impact_entry   = [k, mutation_dict[k][10], mutation_dict[k][11]]
             impact_list.append(impact_entry)
     i = 0
     for y in impact_list:
@@ -298,7 +298,7 @@ def insertCosmicTissue(mutation_dict):
 
     for k in mutation_dict:
         if k != "None":
-            tissue_line = [k, mutation_dict[k][11], mutation_dict[k][12]]
+            tissue_line = [k, mutation_dict[k][12], mutation_dict[k][13]]
             tissue_list.append(tissue_line)
 
     i = 0

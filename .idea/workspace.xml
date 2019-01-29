@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6a0eacb8-d2ea-443e-8d87-45b870ed4c78" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/cosmic_parser.py" afterPath="$PROJECT_DIR$/cosmic_parser.py" />
       <change beforePath="$PROJECT_DIR$/dbinsert_module.py" afterPath="$PROJECT_DIR$/dbinsert_module.py" />
+      <change beforePath="$PROJECT_DIR$/domain_mapper.py" afterPath="$PROJECT_DIR$/domain_mapper.py" />
+      <change beforePath="$PROJECT_DIR$/kinesin.sql" afterPath="$PROJECT_DIR$/kinesin.sql" />
+      <change beforePath="$PROJECT_DIR$/mutation_parser.py" afterPath="$PROJECT_DIR$/mutation_parser.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,16 +17,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mutation_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+            <state relative-caret-position="1020">
+              <caret line="248" column="12" lean-forward="false" selection-start-line="248" selection-start-column="12" selection-end-line="248" selection-end-column="12" />
               <folding>
                 <element signature="e#1416#1425#0" expanded="true" />
-                <marker date="1548509487000" expanded="true" signature="5289:6148" ph="..." />
-                <marker date="1548509487000" expanded="true" signature="8852:8955" ph="..." />
+                <marker date="1548779910000" expanded="true" signature="9710:10373" ph="..." />
+                <marker date="1548779910000" expanded="true" signature="9780:10060" ph="..." />
+                <marker date="1548779910000" expanded="true" signature="10112:10185" ph="..." />
+                <marker date="1548779910000" expanded="true" signature="10214:10283" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="domain_mapper.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/domain_mapper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="59" column="5" lean-forward="false" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -32,7 +46,7 @@
       <file leaf-file-name="cosmic_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cosmic_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="1479">
               <caret line="92" column="68" lean-forward="false" selection-start-line="88" selection-start-column="12" selection-end-line="92" selection-end-column="68" />
               <folding>
                 <element signature="e#1088#1097#0" expanded="true" />
@@ -45,11 +59,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbinsert_module.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dbinsert_module.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5627">
-              <caret line="331" column="39" lean-forward="true" selection-start-line="331" selection-start-column="39" selection-end-line="331" selection-end-column="39" />
+            <state relative-caret-position="701">
+              <caret line="333" column="0" lean-forward="true" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
               <folding>
                 <element signature="e#1056#1066#0" expanded="true" />
               </folding>
@@ -76,14 +90,16 @@
         <option value="$PROJECT_DIR$/source_insert.py" />
         <option value="$PROJECT_DIR$/gdc_parser.py" />
         <option value="$PROJECT_DIR$/cosmic_parser.py" />
-        <option value="$PROJECT_DIR$/dbinsert_module.py" />
+        <option value="$PROJECT_DIR$/domain_mapping.py" />
+        <option value="$PROJECT_DIR$/domain_mapper.py" />
         <option value="$PROJECT_DIR$/mutation_parser.py" />
+        <option value="$PROJECT_DIR$/dbinsert_module.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="642" />
-    <option name="y" value="23" />
+    <option name="x" value="386" />
+    <option name="y" value="76" />
     <option name="width" value="1300" />
     <option name="height" value="925" />
   </component>
@@ -102,7 +118,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -115,6 +130,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -137,7 +153,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.mutation_parser">
+  <component name="RunManager" selected="Python.dbinsert_module">
     <configuration name="cosmic_parser" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -174,7 +190,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="gdc_impact" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="domain_mapper" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -186,13 +202,13 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kinesin_db" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gdc_impact.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_mapper.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="gdc_parser" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="domain_mapping" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -204,7 +220,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kinesin_db" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gdc_parser.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_mapping.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -229,19 +245,19 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.gdc_parser" />
-      <item index="1" class="java.lang.String" itemvalue="Python.gdc_impact" />
-      <item index="2" class="java.lang.String" itemvalue="Python.cosmic_parser" />
-      <item index="3" class="java.lang.String" itemvalue="Python.dbinsert_module" />
-      <item index="4" class="java.lang.String" itemvalue="Python.mutation_parser" />
+      <item index="0" class="java.lang.String" itemvalue="Python.cosmic_parser" />
+      <item index="1" class="java.lang.String" itemvalue="Python.dbinsert_module" />
+      <item index="2" class="java.lang.String" itemvalue="Python.mutation_parser" />
+      <item index="3" class="java.lang.String" itemvalue="Python.domain_mapping" />
+      <item index="4" class="java.lang.String" itemvalue="Python.domain_mapper" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.mutation_parser" />
-        <item index="1" class="java.lang.String" itemvalue="Python.dbinsert_module" />
-        <item index="2" class="java.lang.String" itemvalue="Python.cosmic_parser" />
-        <item index="3" class="java.lang.String" itemvalue="Python.gdc_parser" />
-        <item index="4" class="java.lang.String" itemvalue="Python.gdc_impact" />
+        <item index="0" class="java.lang.String" itemvalue="Python.dbinsert_module" />
+        <item index="1" class="java.lang.String" itemvalue="Python.mutation_parser" />
+        <item index="2" class="java.lang.String" itemvalue="Python.domain_mapper" />
+        <item index="3" class="java.lang.String" itemvalue="Python.domain_mapping" />
+        <item index="4" class="java.lang.String" itemvalue="Python.cosmic_parser" />
       </list>
     </recent_temporary>
   </component>
@@ -262,7 +278,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="642" y="23" width="1300" height="925" extended-state="0" />
+    <frame x="386" y="76" width="1300" height="925" extended-state="0" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23384616" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -295,15 +311,48 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/mutation_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#1416#1425#0" expanded="true" />
+            <marker date="1548779910000" expanded="true" signature="9710:10373" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="9780:10060" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="10112:10185" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="10214:10283" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cosmic_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="92" column="68" lean-forward="false" selection-start-line="88" selection-start-column="12" selection-end-line="92" selection-end-column="68" />
+          <folding>
+            <element signature="e#1088#1097#0" expanded="true" />
+            <marker date="1548503312000" expanded="true" signature="1288:3431" ph="..." />
+            <marker date="1548503312000" expanded="true" signature="1996:2058" ph="..." />
+            <marker date="1548503312000" expanded="true" signature="2321:2479" ph="..." />
+            <marker date="1548503312000" expanded="true" signature="3593:3713" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5576">
+          <caret line="331" column="39" lean-forward="true" selection-start-line="331" selection-start-column="39" selection-end-line="331" selection-end-column="39" />
+          <folding>
+            <element signature="e#1056#1066#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gdc_parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2295">
           <caret line="139" column="18" lean-forward="true" selection-start-line="139" selection-start-column="4" selection-end-line="139" selection-end-column="18" />
-          <folding>
-            <element signature="e#1362#1371#0" expanded="false" />
-            <marker date="1548438977000" expanded="true" signature="1550:4297" ph="..." />
-            <marker date="1548438977000" expanded="true" signature="4450:4905" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -311,7 +360,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -333,11 +381,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1362#1371#0" expanded="false" />
-            <marker date="1548438977000" expanded="true" signature="1550:4297" ph="..." />
-            <marker date="1548438977000" expanded="true" signature="4450:4905" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -345,7 +388,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -353,11 +395,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1362#1371#0" expanded="false" />
-            <marker date="1548438977000" expanded="true" signature="1550:4297" ph="..." />
-            <marker date="1548438977000" expanded="true" signature="4450:4905" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -365,7 +402,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -373,11 +409,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1362#1371#0" expanded="false" />
-            <marker date="1548438977000" expanded="true" signature="1550:4297" ph="..." />
-            <marker date="1548438977000" expanded="true" signature="4450:4905" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -401,7 +432,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="19" lean-forward="true" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -409,7 +439,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1972">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -417,11 +446,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#1362#1371#0" expanded="false" />
-            <marker date="1548438977000" expanded="true" signature="1550:4297" ph="..." />
-            <marker date="1548438977000" expanded="true" signature="4450:4905" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -429,23 +453,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5627">
-          <caret line="331" column="39" lean-forward="true" selection-start-line="331" selection-start-column="39" selection-end-line="331" selection-end-column="39" />
-          <folding>
-            <element signature="e#1056#1066#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cosmic_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="1479">
           <caret line="92" column="68" lean-forward="false" selection-start-line="88" selection-start-column="12" selection-end-line="92" selection-end-column="68" />
           <folding>
             <element signature="e#1088#1097#0" expanded="true" />
@@ -457,14 +470,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/domain_mapping.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mutation_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+        <state relative-caret-position="1020">
+          <caret line="248" column="12" lean-forward="false" selection-start-line="248" selection-start-column="12" selection-end-line="248" selection-end-column="12" />
           <folding>
             <element signature="e#1416#1425#0" expanded="true" />
-            <marker date="1548509487000" expanded="true" signature="5289:6148" ph="..." />
-            <marker date="1548509487000" expanded="true" signature="8852:8955" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="9710:10373" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="9780:10060" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="10112:10185" ph="..." />
+            <marker date="1548779910000" expanded="true" signature="10214:10283" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/domain_mapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="59" column="5" lean-forward="false" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="701">
+          <caret line="333" column="0" lean-forward="true" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
+          <folding>
+            <element signature="e#1056#1066#0" expanded="true" />
           </folding>
         </state>
       </provider>
