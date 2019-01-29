@@ -318,9 +318,9 @@ def insertCosmicTissue(mutation_dict):
 
 if __name__ == "__main__":
 
-    gdc_att         = mutation_parser.parseGDC('KIF11', 'mutations.2018-10-03.json')
+    gdc_att         = mutation_parser.parseGDC('KIF11', 'mutations.2019-01-23.json')
     cosmic_mutation = mutation_parser.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
-    impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2018-10-03.json', 'V87_38_MUTANT.csv')
+    impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
 
     # insert commands must be in this order
     insertMutation(gdc_att)

@@ -102,7 +102,7 @@ def parseGDC(gene, json_file):
             consequence = p.sub('', consequence)
             q = re.compile(r'^Single base')
             mutation_type = q.sub('', mutation_type)
-            
+
             # put all strings into lists for each table
             if gene_name == my_gene:            ## check that gene is KIF11
                 mut_entry       = [genomic_id, coding, cds, mutation_type, consequence, protein, gene_name, organism, domain]

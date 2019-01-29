@@ -63,16 +63,15 @@ def cosmicParser(my_gene, csv_file):
             try:
                 # mutation table  (only include info not available in gdc files)
                 gene_name       = row[0]
-                #genomic_id      = row[1]
-                #coding          = 'y'
+                genomic_id      = row[1]
+                coding          = 'y'
                 protein         = row[18]
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
                 cds             = row[17]
-                #mutation_type   = row[19]           # need all before hyphen
-                #consequence     = row[19]           # after the hyphen
-                #organism        = 'Homo sapiens'
-                #domain          = ' '               # calculate later
+                description     = row[19]             # includes type and consequence
+                organism        = 'Homo sapiens'
+                domain          = ' '                 # calculate later
 
                 # source_info table
                 source_db       = 'COSMIC'
@@ -87,10 +86,15 @@ def cosmicParser(my_gene, csv_file):
             except Error as e:
                 print("Error", e)
 
+            p   = re.compile(r'(^\w+)\s-\s(.+$)')
+            it  = p.finditer(description)
+            for match in it:
+                mutation_type   = match.group(1)  # need all before hyphen
+                consequence     = match.group(2)  # after the hyphen
+
             # make dictionary to fill in missing attribute fields in mutation table before insertion
             if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
-                mutation_dict[protein] = (cds, source_db, source_id, fathhm_score, fathhm_pred, tissue_type,
-                                            cancer_type)
+                mutation_dict[protein] = (cds, mutation_type, consequence)
 
     return mutation_dict
 
