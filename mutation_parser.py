@@ -43,6 +43,7 @@ import re
 import sys
 import pymysql
 import config_kinesin
+import domain_mapper as d
 import json
 import csv
 
@@ -93,7 +94,7 @@ def parseGDC(gene, json_file):
                 coding          = 'y'
                 cds             = ' '
                 organism        = 'Homo sapiens'
-                domain          = ' '              # determine later
+                domain          = d.domainMapper(protein)           #calls domain mapping function
                 x += 1
             except Error as e:
                 print("Error", e)
@@ -148,13 +149,14 @@ def cosmicParser(my_gene, csv_file):
                 gene_name       = row[0]
                 genomic_id      = row[23]
                 coding          = 'y'
-                protein         = row[18].lower()
+                protein         = row[18]
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
                 cds             = row[17]
+                cds             = cds.replace('c.', '')
                 description     = row[19].lower()          # parse out type and consequence below
                 organism        = 'Homo sapiens'
-                domain          = ' '               # calculate later
+                domain          = d.domainMapper(protein)   # calls domain mapping function
 
                 # source_info table
                 source_db       = 'COSMIC'
@@ -216,6 +218,7 @@ def combineImpact(gene, json_file, csv_file):
     return  total_impact
 
 # *************************************************************************************
+
 ########## main ############
 
 if __name__ == "__main__":
@@ -232,14 +235,14 @@ if __name__ == "__main__":
 
     i = 0
     j = 0
-    for x in gdc_att[0]:
-       # if x[5] != "None":  # and x[4] == "missense_variant":
-            #i += 1
-        print(x[0], x[3])
-    #for x in cosmic_dict:
-    #    j += 1
-        #print(x, cosmic_dict[x][3])
-    #print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
+    #for x in gdc_mut:
+        #if x[5] != "None":  # and x[4] == "missense_variant":
+        #    i += 1
+        #print(x[8])
+    for x in cosmic_dict:
+        j += 1
+        print(cosmic_dict[x][6])
+   # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
 
