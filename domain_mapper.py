@@ -55,7 +55,7 @@ def domainMapper(mutation):
         elif x > 915 and x < 1054:
             domain_dict[x] = 'microtubule-binding'
         else:
-            domain_dict[x] = 'UNK'
+            domain_dict[x] = 'coiled-coil/disorder'
 
     #find residue number
     residue_num = ''

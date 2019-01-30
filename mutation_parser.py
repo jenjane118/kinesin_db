@@ -112,7 +112,7 @@ def parseGDC(gene, json_file):
             p = re.compile(r'_variant$')
             consequence = p.sub('', consequence)
             s = re.compile(r'stop_gained')
-            consequence = s.sub('', consequence)
+            consequence = s.sub('nonsense', consequence)
             q = re.compile(r'^Single base ')
             mutation_type = q.sub('', mutation_type)
             r = re.compile(r'^Small ')
@@ -245,12 +245,12 @@ if __name__ == "__main__":
     j = 0
     for x in gdc_mut:
         if x[0] != "None":  # and x[4] == "missense_variant":
-        #    i += 1
-            print(x[1])
-    for x in cosmic_dict:
+            i += 1
+            #print(x[1])
+    for y in cosmic_dict:
         j += 1
-        print(cosmic_dict[x][0])
-   # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
+        #print(cosmic_dict[x][0])
+    print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
 
 
 
