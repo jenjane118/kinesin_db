@@ -50,12 +50,12 @@ def domainMapper(mutation):
 
     domain_dict = {}
     for x in range(1,2000):
-        if x > 23 and x < 360:
+        if x in range(24,359):
             domain_dict[str(x)] = 'kinesin motor'
-        elif x > 915 and x < 1054:
-            domain_dict[x] = 'microtubule-binding'
+        elif x in range(916, 1053): #> 915 and x < 1054:
+            domain_dict[str(x)] = 'microtubule-binding'
         else:
-            domain_dict[x] = 'coiled-coil/disorder'
+            domain_dict[str(x)] = 'coiled-coil/disorder'
 
     #find residue number
     residue_num = ''
@@ -75,5 +75,5 @@ def domainMapper(mutation):
 
 if __name__ == "__main__":
 
-    p = domainMapper('A24T')
+    p = domainMapper('A366T')
     print(p)
