@@ -50,7 +50,7 @@ def insertCosmicSource(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host  =config_kinesin.database_config['dbhost'],
-                          port  =config_kinesin.database_config['port'],
+                          #port  =config_kinesin.database_config['port'],
                           user  =config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db    =config_kinesin.database_config['dbname'])
@@ -81,7 +81,7 @@ def insertMutation(mutations):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -104,7 +104,7 @@ def insertSource(mutations):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -127,7 +127,7 @@ def insertCombinedImpact(impact):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -154,7 +154,7 @@ def insertGdcImpact(mutations):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -180,7 +180,7 @@ def insertTissue(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -212,7 +212,7 @@ def insertCosmicMutation(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -252,7 +252,7 @@ def insertCosmicImpact(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -286,7 +286,7 @@ def insertCosmicTissue(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
+                          #port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
