@@ -172,6 +172,8 @@ def cosmicParser(my_gene, csv_file):
                 # tissue table
                 tissue_type     = row[7]
                 cancer_type     = row[12]
+                if cancer_type  == 'NS':
+                    cancer_type = row[11]
             except Error as e:
                 print("Error", e)
 
