@@ -1,6 +1,6 @@
 #!/usr/bin python3
 
-""" Cancer Genome Atlas Parser/Mutation table """
+""" Cancer Database Parser Module """
 
 """
 Program:    mutation_parser
