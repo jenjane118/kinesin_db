@@ -166,8 +166,8 @@ def cosmicParser(my_gene, csv_file):
                 source_db       = 'COSMIC'
                 source_id       = row[16]
                 # impact table
-                fathhm_score    = row[28]
-                fathhm_pred     = row[27]
+                fathhm_score    = row[27]
+                fathhm_pred     = row[28]
 
                 # tissue table
                 tissue_type     = row[7]
@@ -221,39 +221,81 @@ def combineImpact(gene, json_file, csv_file):
     for x in gdc_impact:
         if x[0] in cosmic_mutation:
             k = x[0]
-            y = [x[0], x[1], x[2], x[3], cosmic_mutation[k][9], cosmic_mutation[k][10]]
+            y = [x[0], x[1], x[2], x[3], cosmic_mutation[k][11], cosmic_mutation[k][10]]
             total_impact.append(y)
     # will only insert impact attributes for mutations found in cosmic AND gdc
     # will need to insert gdc separately
     return  total_impact
 
 # *************************************************************************************
+def tissueGDC(gene, json_file):
+    """ Function to parse json files from Genomic Data Commons.
+    Input                   gene                gene name
+                            file                file of JSON mutations
+    Output                  tissue_list         list of strings for tissue table
+
+    """
+
+    tissue_entry    = []
+    tissue_list     = []
+
+    source_db = 'GDC'
+    my_gene = 'KIF11'
+
+    with open (json_file, 'r') as f:
+        tissue = json.load(f)
+        ## first index is the item number, 'x'
+        x = 0
+        for k in tissue:
+            try:
+                mutation_name   = str(tissue[x]['data']['gene_aa_change'])
+                tissue_type     = str(tissue[x]['data']['occurrence'][0]['case']['primary_site'])
+                cancer_type     = str(tissue[x]['data']['occurrence'][0]['case']['disease_type'])
+                x += 1
+            except NameError as e:
+                print("Error", e)
+
+            gene_name   = str(mutation_name[2:7])
+            mutation_id = str(mutation_name[8:13])
+
+            if my_gene in gene_name:  ## check that gene is KIF11
+                tissue_entry    = [mutation_id, tissue_type, cancer_type]
+                tissue_list.append(tissue_entry)
+            else:
+                pass
+    f.close()
+
+    return tissue_list
+
+# ******************************************************************************
 
 ########## main ############
 
 if __name__ == "__main__":
 
-    gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
-    gdc_mut    = gdc_att[0]
+    #gdc_att    = parseGDC('KIF11', 'mutations.2019-01-23.json')
+    #gdc_mut    = gdc_att[0]
     # gdc_source = gdc_att[1]
-    # gdc_impact = gdc_att[2]
+    #gdc_impact = gdc_att[2]
     # #print(gdc_att[0])
 
     cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
     #t_impact = combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
-    #print(t_impact)
-
-    i = 0
-    j = 0
-    for x in gdc_mut:
-        if x[0] != "None":  # and x[4] == "missense_variant":
-            i += 1
-            #print(x[1])
-    for y in cosmic_dict:
-        j += 1
-        #print(cosmic_dict[x][0])
-    print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
-
+    #for x in t_impact:
+    for x in cosmic_dict:
+        print(cosmic_dict[x][10:12])
+    print(len(cosmic_dict))
+    # i = 0
+    # j = 0
+    # for x in gdc_mut:
+    #     if x[0] != "None":  # and x[4] == "missense_variant":
+    #         i += 1
+    #         #print(x[1])
+    # for y in cosmic_dict:
+    #     j += 1
+    #     #print(cosmic_dict[x][0])
+    # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
+    #
 
 
 

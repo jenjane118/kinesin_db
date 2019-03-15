@@ -266,7 +266,7 @@ def insertCosmicImpact(mutation_dict):
 
     for k in mutation_dict:
         if k != "None":
-            impact_entry   = [k, mutation_dict[k][10], mutation_dict[k][11]]
+            impact_entry   = [k, mutation_dict[k][11], mutation_dict[k][10]]
             impact_list.append(impact_entry)
     i = 0
     for y in impact_list:
@@ -286,7 +286,7 @@ def insertCosmicTissue(mutation_dict):
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
+                          port=config_kinesin.database_config['port'],
                           user=config_kinesin.database_config['dbuser'],
                           passwd=config_kinesin.database_config['dbpass'],
                           db=config_kinesin.database_config['dbname'])
@@ -315,6 +315,33 @@ def insertCosmicTissue(mutation_dict):
     return i
 # ******************************************************************************
 
+def insertGdcTissue(tissue_list):
+    """Inserts entry into impact table.
+    Input               tissue_list             list of mutation attributes from gdc for tissue
+    Output                                      inserted row into impact table
+                        i                       number of inserted rows
+    """
+    # Connect to MySQL database
+    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                          port=config_kinesin.database_config['port'],
+                          user=config_kinesin.database_config['dbuser'],
+                          passwd=config_kinesin.database_config['dbpass'],
+                          db=config_kinesin.database_config['dbname'])
+    cursor = cnx.cursor(pymysql.cursors.DictCursor)
+
+    sql_tissue = "INSERT IGNORE tissue (mutation_id, tissue_type, cancer_type) VALUES(%s,%s,%s)"
+
+    i = 0
+    for x in tissue_list:
+        if x[0] != "None":
+            rows = cursor.execute(sql_tissue, x)
+            i += 1
+    cnx.commit()
+    cnx.close()
+    return  i
+
+# ******************************************************************************
+
 ########## main ############
 
 if __name__ == "__main__":
@@ -323,12 +350,17 @@ if __name__ == "__main__":
     cosmic_mutation = mutation_parser.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
     impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
 
+    tissueGDC       = mutation_parser.tissueGDC('KIF11', 'results.json')
+
     # insert commands must be in this order
-    insertMutation(gdc_att)
+    #insertMutation(gdc_att)
     insertCosmicMutation(cosmic_mutation)
-    insertSource(gdc_att)
-    insertCosmicSource(cosmic_mutation)
+    #insertSource(gdc_att)
+    #insertCosmicSource(cosmic_mutation)
     insertCombinedImpact(impact_all)
     insertGdcImpact(gdc_att)
     insertCosmicImpact(cosmic_mutation)
-    insertCosmicTissue(cosmic_mutation)
+
+    #insertCosmicTissue(cosmic_mutation)
+
+    #insertGdcTissue(tissueGDC)
