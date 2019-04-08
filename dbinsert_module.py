@@ -134,7 +134,7 @@ def insertCombinedImpact(impact):
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_impact = "INSERT INTO impact (mutation_id, vep, sift_prediction, polyphen_prediction, " \
-                 "fathhm_score, fathhm_prediction) VALUES(%s,%s,%s,%s,%s,%s)"
+                 "fathmm_score, fathmm_prediction) VALUES(%s,%s,%s,%s,%s,%s)"
     i = 0
     for x in impact:
         if x[0] != "None":
@@ -173,10 +173,10 @@ def insertGdcImpact(mutations):
 
 # ******************************************************************************
 
-def insertTissue(mutation_dict):
-    """Inserts entry into impact table.
-    Input               mutation_dict               dict of mutation attributes from cosmic
-    Output                                          inserted row into impact table
+def insertCosmicTissue(cos_tissue_list):
+    """Inserts entry into tissue table.
+    Input               mutation_tissue             list of mutation attributes from cosmic
+    Output                                          inserted row into tissue table
     """
     # Connect to MySQL database
     cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
@@ -186,19 +186,14 @@ def insertTissue(mutation_dict):
                           db=config_kinesin.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_tissue = "INSERT INTO tissue (mutation_id, tissue_type, cancer_type) VALUES(%s,%s,%s)"
+    sql_tissue = "INSERT IGNORE tissue (mutation_id, sample_id, tissue_type, cancer_type) VALUES(%s,%s,%s,%s)"
 
     tissue_line = []
     tissue_list = []
-    # extract values from mutation_dict and put in list
-    for k in mutation_dict:
-        if k != "None":
-            tissue_line = [k, mutation_dict[k][12], mutation_dict[k][13]]
-            tissue_list.append(tissue_line)
-
     # use list to populate tissue table
-    for x in tissue_list:
-        rows = cursor.execute(sql_tissue, x)
+    for x in cos_tissue_list:
+        if x[0] != "None":
+            rows = cursor.execute(sql_tissue, x)
 
     cnx.commit()
     cnx.close()
@@ -228,7 +223,7 @@ def insertCosmicMutation(mutation_dict):
     for k in mutation_dict:
         if k != "None":
             mutation_entry = [k, mutation_dict[k][0], mutation_dict[k][1], mutation_dict[k][2], mutation_dict[k][3],
-                              mutation_dict[k][4], mutation_dict[k][5], mutation_dict[k][14],
+                              mutation_dict[k][4], mutation_dict[k][5], mutation_dict[k][12],
                               mutation_dict[k][6], mutation_dict[k][7]]
             # insert cosmic impact info for mutations not in gdc
             mutation_list.append(mutation_entry)
@@ -259,7 +254,7 @@ def insertCosmicImpact(mutation_dict):
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     # insert impact attributes for mutations in cosmic but ignore mutations already in db
-    sql_impact      = "INSERT IGNORE impact (mutation_id, fathhm_score, fathhm_prediction) VALUES(%s,%s,%s)"
+    sql_impact      = "INSERT IGNORE impact (mutation_id, fathmm_score, fathmm_prediction) VALUES(%s,%s,%s)"
 
     impact_entry    = []
     impact_list     = []
@@ -278,41 +273,7 @@ def insertCosmicImpact(mutation_dict):
 
     return i
 
-# ******************************************************************************
-def insertCosmicTissue(mutation_dict):
-    """Inserts entry into mutation table. (have to do each table in sep function to avoid foreign key constraints)
-    Input               mutation_dict       dictionary of attributes from Cosmic csv file
-    Output                                  inserts attributes into tissue table
-    """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
-    cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_tissue      = "INSERT INTO tissue (mutation_id, tissue_type, cancer_type) VALUES(%s,%s,%s)"
-
-    tissue_line     = []
-    tissue_list     = []
-
-    for k in mutation_dict:
-        if k != "None":
-            tissue_line = [k, mutation_dict[k][12], mutation_dict[k][13]]
-            tissue_list.append(tissue_line)
-
-    i = 0
-
-    # use list to populate tissue table
-    for z in tissue_list:
-        rows = cursor.execute(sql_tissue, z)
-        i += 1
-
-    cnx.commit()
-    cnx.close()
-
-    return i
 # ******************************************************************************
 
 def insertGdcTissue(tissue_list):
@@ -329,7 +290,7 @@ def insertGdcTissue(tissue_list):
                           db=config_kinesin.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_tissue = "INSERT IGNORE tissue (mutation_id, tissue_type, cancer_type) VALUES(%s,%s,%s)"
+    sql_tissue = "INSERT IGNORE tissue (mutation_id, sample_id, tissue_type, cancer_type) VALUES(%s,%s,%s,%s)"
 
     i = 0
     for x in tissue_list:
@@ -349,18 +310,18 @@ if __name__ == "__main__":
     gdc_att         = mutation_parser.parseGDC('KIF11', 'mutations.2019-01-23.json')
     cosmic_mutation = mutation_parser.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
     impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
-
+    cos_tissue_list = mutation_parser.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
     tissueGDC       = mutation_parser.tissueGDC('KIF11', 'results.json')
 
     # insert commands must be in this order
-    #insertMutation(gdc_att)
+    insertMutation(gdc_att)
     insertCosmicMutation(cosmic_mutation)
-    #insertSource(gdc_att)
-    #insertCosmicSource(cosmic_mutation)
+    insertSource(gdc_att)
+    insertCosmicSource(cosmic_mutation)
     insertCombinedImpact(impact_all)
     insertGdcImpact(gdc_att)
     insertCosmicImpact(cosmic_mutation)
 
-    #insertCosmicTissue(cosmic_mutation)
+    insertCosmicTissue(cos_tissue_list)
 
-    #insertGdcTissue(tissueGDC)
+    insertGdcTissue(tissueGDC)
