@@ -40,6 +40,8 @@ import csv
 import mutation_parser as m
 import db_query as q
 import re
+import config_home
+import pymysql
 
 #*****************************************************************************
 
@@ -148,4 +150,44 @@ if __name__ == "__main__":
 
         new_entry   = [mutation, vep, poly_pred, poly_score, sift_pred, sift_score]
         new_list.append(new_entry)
-    print(new_list)
+    #print(new_list)
+
+
+    # now need to make query that matches cds attribute and gets mutation id from mutation table
+    # then use mutation id to insert into impact table
+
+    # Connect to MySQL Database
+    cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                          port=config_home.database_config['port'],
+                          user=config_home.database_config['dbuser'],
+                          passwd=config_home.database_config['dbpass'],
+                          db=config_home.database_config['dbname'])
+    cursor = cnx.cursor(pymysql.cursors.DictCursor)
+
+    insert_list = []
+    for x in new_list:
+        mutation = str.format(x[0])
+        #print(mutation)
+        with cnx.cursor() as cursor:
+            query = "SELECT protein FROM mutation WHERE cds = %s ;"
+
+            cursor.execute(query, (mutation))
+            temp = cursor.fetchone()
+        # inserts amino acid change as first element of list
+        x.insert(6, temp[0])
+        x.pop(0)
+        insert_list.append(x)
+    print(insert_list)
+
+    # for y in insert_list:
+    #
+    #
+    #     with cnx.cursor() as cursor:
+    #
+    #         sql_impact = "UPDATE impact (vep, polyphen_prediction, polyphen_score, sift_prediction, sift_score) \
+    #                     VALUES (%s,%s,%s,%s,%s) WHERE mutation_id = %s ;"
+
+        #insert_list = [x[1], x[2], x[3], x[4], x[5]]
+
+    #INSERT impact(vep, polyphen_prediction, polyphen_score, sift_prediction, sift_score)
+    #VALUES(
