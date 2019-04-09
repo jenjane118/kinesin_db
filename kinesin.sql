@@ -91,14 +91,10 @@ CREATE table										source_info
 
 CREATE table										frequency
 (			mutation_id								VARCHAR(45)				NOT NULL,
-            thou_genome_maf  				VARCHAR(10)				DEFAULT 'UNK'
-																									NOT NULL,
-			goesp_maf								VARCHAR(10)				DEFAULT 'UNK'
-																									NOT NULL,
-			exac_maf								VARCHAR(10)				DEFAULT 'UNK'
-																									NOT NULL,
-			gdc_freq									VARCHAR(10)				DEFAULT 'UNK'
-																									NOT NULL,
+			gdc_freq								VARCHAR(10)				DEFAULT 'UNK'
+																			NOT NULL,
+			cosmic_freq                             VARCHAR(10)             DEFAULT 'UNK'
+			                                                                NOT NULL,
 			PRIMARY KEY (mutation_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
 )ENGINE=InnoDB;
@@ -118,9 +114,9 @@ CREATE table										impact
 																									NOT NULL,
 			polyphen_prediction				VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
-			fathhm_score							VARCHAR(25)				DEFAULT 'UNK'
+			fathmm_score							VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
-			fathhm_prediction					VARCHAR(25)				DEFAULT 'UNK'
+			fathmm_prediction					VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
 			clinvar_prediction					VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
@@ -130,11 +126,12 @@ CREATE table										impact
 
 CREATE table										tissue
 (			mutation_id								VARCHAR(45)				NOT NULL,
+			sample_id                               VARCHAR(100)            NOT NULL,
 			tissue_type								VARCHAR(100)				DEFAULT 'UNK'
 																									NOT NULL,
 			cancer_type							VARCHAR(100)				DEFAULT 'UNK'
 																									NOT NULL,
-			PRIMARY KEY (mutation_id),
+			PRIMARY KEY (mutation_id, sample_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
