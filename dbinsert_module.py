@@ -29,6 +29,7 @@ Revision History:
 =================
 V1.0    25.01.19        Initial version                             By: JJS
 V1.1    26.01.19        Complete insertion from both databases          JJS
+V1.2    09.04.19        Update impact table with vep                    JJS
 
 """
 

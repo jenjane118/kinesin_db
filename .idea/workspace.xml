@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a0eacb8-d2ea-443e-8d87-45b870ed4c78" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/db_query.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/vep_parse.py" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/mutation_parser.py" afterPath="$PROJECT_DIR$/mutation_parser.py" />
+      <change beforePath="$PROJECT_DIR$/dbinsert_module.py" afterPath="$PROJECT_DIR$/dbinsert_module.py" />
+      <change beforePath="$PROJECT_DIR$/vep_parse.py" afterPath="$PROJECT_DIR$/vep_parse.py" />
     </list>
     <ignored path="venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,27 +32,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vep_parse.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="vep_parse.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vep_parse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1316">
-              <caret line="2" column="18" lean-forward="false" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+            <state relative-caret-position="350">
+              <caret line="148" column="61" lean-forward="false" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="61" />
               <folding>
-                <marker date="1554823437000" expanded="true" signature="1146:1206" ph="import ..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dbinsert_module.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="56" column="51" lean-forward="true" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="51" />
-              <folding>
-                <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
-                <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
-                <marker date="1553179208000" expanded="true" signature="13262:13323" ph="..." />
+                <element signature="e#1147#1157#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,8 +47,8 @@
       <file leaf-file-name="VEP_output.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/VEP_output.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="204">
+              <caret line="12" column="297" lean-forward="true" selection-start-line="12" selection-start-column="297" selection-end-line="12" selection-end-column="297" />
               <folding />
             </state>
           </provider>
@@ -73,18 +57,32 @@
       <file leaf-file-name="vep_input.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vep_input.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+            <state relative-caret-position="85">
+              <caret line="5" column="25" lean-forward="true" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="dbinsert_module.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1275">
+              <caret line="31" column="75" lean-forward="false" selection-start-line="31" selection-start-column="75" selection-end-line="31" selection-end-column="75" />
+              <folding>
+                <marker date="1554824165000" expanded="true" signature="8071:8099" ph="..." />
+                <marker date="1554824165000" expanded="true" signature="8098:8099" ph="..." />
+                <marker date="1554824165000" expanded="true" signature="13338:13399" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mutation_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2329">
-              <caret line="15" column="52" lean-forward="true" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
+            <state relative-caret-position="153">
+              <caret line="109" column="36" lean-forward="true" selection-start-line="109" selection-start-column="36" selection-end-line="109" selection-end-column="36" />
               <folding>
                 <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
                 <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
@@ -97,8 +95,8 @@
       <file leaf-file-name="V87_38_MUTANT.csv" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
           <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="153" lean-forward="false" selection-start-line="1" selection-start-column="144" selection-end-line="1" selection-end-column="153" />
+            <state relative-caret-position="34">
+              <caret line="2" column="148" lean-forward="false" selection-start-line="2" selection-start-column="148" selection-end-line="2" selection-end-column="148" />
               <folding />
             </state>
           </provider>
@@ -120,21 +118,11 @@
       <file leaf-file-name="gdc_api.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gdc_api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
+            <state relative-caret-position="418">
               <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
               <folding>
                 <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -160,13 +148,13 @@
         <option value="$PROJECT_DIR$/cosmic_parser.py" />
         <option value="$PROJECT_DIR$/domain_mapping.py" />
         <option value="$PROJECT_DIR$/domain_mapper.py" />
-        <option value="$PROJECT_DIR$/dbinsert_module.py" />
         <option value="$PROJECT_DIR$/tgdc_mutationset.tsv" />
         <option value="$PROJECT_DIR$/data.json" />
         <option value="$PROJECT_DIR$/gdc_api.py" />
         <option value="$PROJECT_DIR$/web_app/db_query.py" />
         <option value="$PROJECT_DIR$/mutation_parser.py" />
         <option value="$PROJECT_DIR$/db_query.py" />
+        <option value="$PROJECT_DIR$/dbinsert_module.py" />
         <option value="$PROJECT_DIR$/vep_parse.py" />
       </list>
     </option>
@@ -369,7 +357,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29295775" sideWeight="0.5024493" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32816902" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29295775" sideWeight="0.49755073" order="2" side_tool="false" content_ui="tabs" x="401" y="339" width="1429" height="208" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29295775" sideWeight="0.49755073" order="2" side_tool="false" content_ui="tabs" x="401" y="339" width="1429" height="208" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24982505" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1840448" sideWeight="0.50563383" order="2" side_tool="true" content_ui="tabs" />
@@ -401,6 +389,14 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -458,9 +454,9 @@
         <state relative-caret-position="203">
           <caret line="316" column="27" lean-forward="true" selection-start-line="316" selection-start-column="27" selection-end-line="316" selection-end-column="27" />
           <folding>
-            <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="13262:13323" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8071:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8098:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="13338:13399" ph="..." />
           </folding>
         </state>
       </provider>
@@ -501,9 +497,9 @@
         <state relative-caret-position="5576">
           <caret line="331" column="39" lean-forward="true" selection-start-line="331" selection-start-column="39" selection-end-line="331" selection-end-column="39" />
           <folding>
-            <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="13262:13323" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8071:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8098:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="13338:13399" ph="..." />
           </folding>
         </state>
       </provider>
@@ -678,14 +674,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vep.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -702,17 +690,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="153" lean-forward="false" selection-start-line="1" selection-start-column="144" selection-end-line="1" selection-end-column="153" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tcga tissue parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-7">
@@ -721,41 +698,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vep_input.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/VEP_output.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gdc_api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-          <folding>
-            <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vep.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fathmm.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -775,36 +718,89 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vep_parse.py">
+    <entry file="file://$PROJECT_DIR$/fathmm.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1316">
-          <caret line="2" column="18" lean-forward="false" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gdc_api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
           <folding>
-            <marker date="1554823437000" expanded="true" signature="1146:1206" ph="import ..." />
+            <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="56" column="51" lean-forward="true" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="51" />
+        <state relative-caret-position="-1275">
+          <caret line="31" column="75" lean-forward="false" selection-start-line="31" selection-start-column="75" selection-end-line="31" selection-end-column="75" />
           <folding>
-            <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
-            <marker date="1553179208000" expanded="true" signature="13262:13323" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8071:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="8098:8099" ph="..." />
+            <marker date="1554824165000" expanded="true" signature="13338:13399" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep_input.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="25" lean-forward="true" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="148" lean-forward="false" selection-start-line="2" selection-start-column="148" selection-end-line="2" selection-end-column="148" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/VEP_output.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="297" lean-forward="true" selection-start-line="12" selection-start-column="297" selection-end-line="12" selection-end-column="297" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mutation_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2329">
-          <caret line="15" column="52" lean-forward="true" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
+        <state relative-caret-position="153">
+          <caret line="109" column="36" lean-forward="true" selection-start-line="109" selection-start-column="36" selection-end-line="109" selection-end-column="36" />
           <folding>
             <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
             <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
             <marker date="1554818891000" expanded="true" signature="11335:11743" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep_parse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="148" column="61" lean-forward="false" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="61" />
+          <folding>
+            <element signature="e#1147#1157#0" expanded="true" />
           </folding>
         </state>
       </provider>

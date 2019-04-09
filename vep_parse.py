@@ -39,6 +39,7 @@ V1.0    09.04.19        Initial                                     By: JJS
 import csv
 import mutation_parser as m
 import db_query as q
+import re
 
 #*****************************************************************************
 
@@ -81,6 +82,10 @@ def parseVep(my_gene, vep_file):
 
     return vep_impact_list
 # *****************************************************************************
+## match up mutation with impact info
+
+
+
 
 ########## main ############
 
@@ -94,7 +99,53 @@ if __name__ == "__main__":
 
     impact = parseVep(gene, 'vep_output.txt')
 
-    for x in impact:
-        print(x)
 
 
+
+
+    ## zip together vep_input file and impact list
+    impact_list = []
+
+    with open ('vep_input.txt', 'r') as file:
+        for line in file:
+            gene_list = file.read().splitlines()
+    impact_list = list(zip(gene_list, impact))
+
+    #reformat to be a 4 attribute list for each entry
+    new_list = []
+    new_entry = []
+    sift_pred = ''
+    sift_score = ''
+    for entry in impact_list:
+        mutation    = str(entry[0])
+        ## remove ENST gene info so can use to search db and pop in missing info
+        p           = re.compile(r'^ENST00000260731:c\.')
+        mutation    = p.sub('', mutation)
+        vep         = str(entry[1][0])
+
+        ## need to parse out score and prediction
+        polyphen    = str(entry[1][1])
+        if polyphen == '-':
+            poly_pred = 'UNK'
+            poly_score = 'UNK'
+        else:
+            q       = re.compile(r'^(.*)\((.*)\)')
+            it      = q.finditer(polyphen)
+            for match in it:
+                poly_pred  = match.group(1)
+                poly_score = match.group(2)
+
+        sift        = str(entry[1][2])
+        if sift     == '-':
+            sift_pred  = 'UNK'
+            sift_score = 'UNK'
+        else:
+            s      = re.compile(r'^(.*)\((.*)\)')
+            it      = s.finditer(sift)
+            for match in it:
+                sift_pred   = match.group(1)
+                sift_score  = match.group(2)
+
+        new_entry   = [mutation, vep, poly_pred, poly_score, sift_pred, sift_score]
+        new_list.append(new_entry)
+    print(new_list)
