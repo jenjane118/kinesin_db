@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a0eacb8-d2ea-443e-8d87-45b870ed4c78" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/kinesin_db.iml" afterPath="$PROJECT_DIR$/.idea/kinesin_db.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/db_query.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/vep_parse.py" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/kinesin.sql" afterPath="$PROJECT_DIR$/kinesin.sql" />
-      <change beforePath="$PROJECT_DIR$/sql_queries/consequence_count.sql" afterPath="$PROJECT_DIR$/sql_queries/consequence_count.sql" />
+      <change beforePath="$PROJECT_DIR$/mutation_parser.py" afterPath="$PROJECT_DIR$/mutation_parser.py" />
     </list>
+    <ignored path="venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,27 +20,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mutation_parser.py">
+      <file leaf-file-name="db_query.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/db_query.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="327" column="0" lean-forward="false" selection-start-line="327" selection-start-column="0" selection-end-line="327" selection-end-column="0" />
+            <state relative-caret-position="119">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
-                <marker date="1554807704000" expanded="true" signature="6075:6945" ph="..." />
-                <marker date="1554807704000" expanded="true" signature="11280:11688" ph="..." />
-                <marker date="1554807704000" expanded="true" signature="12825:14259" ph="..." />
+                <element signature="e#118#132#0" expanded="true" />
+                <marker date="1554823437000" expanded="true" signature="267:1190" ph="..." />
+                <marker date="1554823437000" expanded="true" signature="2259:2371" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="gdc_api.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gdc_api.py">
+      <file leaf-file-name="vep_parse.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vep_parse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+            <state relative-caret-position="-1316">
+              <caret line="2" column="18" lean-forward="false" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
               <folding>
-                <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
+                <marker date="1554823437000" expanded="true" signature="1146:1206" ph="import ..." />
               </folding>
             </state>
           </provider>
@@ -49,8 +49,8 @@
       <file leaf-file-name="dbinsert_module.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="656">
-              <caret line="326" column="30" lean-forward="false" selection-start-line="326" selection-start-column="30" selection-end-line="326" selection-end-column="30" />
+            <state relative-caret-position="171">
+              <caret line="56" column="51" lean-forward="true" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="51" />
               <folding>
                 <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
                 <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
@@ -60,13 +60,70 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="results.json" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/results.json">
+      <file leaf-file-name="VEP_output.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/VEP_output.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1700">
-              <caret line="245" column="17" lean-forward="false" selection-start-line="245" selection-start-column="17" selection-end-line="245" selection-end-column="17" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vep_input.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vep_input.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="731">
+              <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mutation_parser.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/mutation_parser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2329">
+              <caret line="15" column="52" lean-forward="true" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
               <folding>
-                <marker date="1554808173000" expanded="true" signature="6:17" ph="{&quot;message&quot;: &quot;id not found&quot;...}" />
+                <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
+                <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
+                <marker date="1554818891000" expanded="true" signature="11335:11743" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="V87_38_MUTANT.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
+          <provider selected="true" editor-type-id="csv-text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="153" lean-forward="false" selection-start-line="1" selection-start-column="144" selection-end-line="1" selection-end-column="153" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="csv-table-editor">
+            <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fathmm.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fathmm.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gdc_api.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gdc_api.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="44">
+              <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+              <folding>
+                <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
               </folding>
             </state>
           </provider>
@@ -79,32 +136,6 @@
               <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
               <folding />
             </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tgdc_mutationset.tsv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tgdc_mutationset.tsv">
-          <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="csv-table-editor">
-            <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="V87_38_MUTANT.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
-          <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="csv-table-editor">
-            <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
           </provider>
         </entry>
       </file>
@@ -132,14 +163,17 @@
         <option value="$PROJECT_DIR$/dbinsert_module.py" />
         <option value="$PROJECT_DIR$/tgdc_mutationset.tsv" />
         <option value="$PROJECT_DIR$/data.json" />
-        <option value="$PROJECT_DIR$/mutation_parser.py" />
         <option value="$PROJECT_DIR$/gdc_api.py" />
+        <option value="$PROJECT_DIR$/web_app/db_query.py" />
+        <option value="$PROJECT_DIR$/mutation_parser.py" />
+        <option value="$PROJECT_DIR$/db_query.py" />
+        <option value="$PROJECT_DIR$/vep_parse.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="231" />
-    <option name="y" value="60" />
+    <option name="x" value="398" />
+    <option name="y" value="24" />
     <option name="width" value="1429" />
     <option name="height" value="805" />
   </component>
@@ -167,6 +201,11 @@
               <item name="kinesin_db" type="b2602c69:ProjectViewProjectNode" />
               <item name="kinesin_db" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="kinesin_db" type="b2602c69:ProjectViewProjectNode" />
+              <item name="kinesin_db" type="462c0819:PsiDirectoryNode" />
+              <item name="web_app" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -178,6 +217,9 @@
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Ignored.Files" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -194,7 +236,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.gdc_api">
+  <component name="RunManager" selected="Python.vep_parse">
+    <configuration name="db_query" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="kinesin_db" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/db_query.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="dbinsert_module" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -208,42 +268,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="kinesin_db" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbinsert_module.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="domain_mapper" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="kinesin_db" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_mapper.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="domain_mapping" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="kinesin_db" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_mapping.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -285,20 +309,38 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="vep_parse" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="kinesin_db" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/vep_parse.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.dbinsert_module" />
       <item index="1" class="java.lang.String" itemvalue="Python.mutation_parser" />
-      <item index="2" class="java.lang.String" itemvalue="Python.domain_mapping" />
-      <item index="3" class="java.lang.String" itemvalue="Python.domain_mapper" />
-      <item index="4" class="java.lang.String" itemvalue="Python.gdc_api" />
+      <item index="2" class="java.lang.String" itemvalue="Python.gdc_api" />
+      <item index="3" class="java.lang.String" itemvalue="Python.db_query" />
+      <item index="4" class="java.lang.String" itemvalue="Python.vep_parse" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.gdc_api" />
-        <item index="1" class="java.lang.String" itemvalue="Python.dbinsert_module" />
-        <item index="2" class="java.lang.String" itemvalue="Python.mutation_parser" />
-        <item index="3" class="java.lang.String" itemvalue="Python.domain_mapper" />
-        <item index="4" class="java.lang.String" itemvalue="Python.domain_mapping" />
+        <item index="0" class="java.lang.String" itemvalue="Python.vep_parse" />
+        <item index="1" class="java.lang.String" itemvalue="Python.db_query" />
+        <item index="2" class="java.lang.String" itemvalue="Python.gdc_api" />
+        <item index="3" class="java.lang.String" itemvalue="Python.dbinsert_module" />
+        <item index="4" class="java.lang.String" itemvalue="Python.mutation_parser" />
       </list>
     </recent_temporary>
   </component>
@@ -319,7 +361,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="231" y="60" width="1429" height="805" extended-state="0" />
+    <frame x="398" y="24" width="1429" height="805" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1840448" sideWeight="0.4943662" order="0" side_tool="false" content_ui="combo" />
@@ -363,60 +405,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Documents/Kinesin_project/VEP_api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-578">
-          <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config_home.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config_kinesin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kinesin.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2006">
-          <caret line="118" column="17" lean-forward="false" selection-start-line="118" selection-start-column="17" selection-end-line="118" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app__init_.py" />
-    <entry file="file://$PROJECT_DIR$/flask_practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="22" lean-forward="false" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app_init_.py" />
-    <entry file="file://$PROJECT_DIR$/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/web_app/templates/template.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web_app/templates/bstemplate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="59" lean-forward="false" selection-start-line="2" selection-start-column="59" selection-end-line="2" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web_app/static/css/template.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -437,14 +425,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tcga tissue parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="38" column="47" lean-forward="false" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
           <folding />
         </state>
       </provider>
@@ -490,9 +470,9 @@
         <state relative-caret-position="1291">
           <caret line="347" column="73" lean-forward="false" selection-start-line="347" selection-start-column="73" selection-end-line="347" selection-end-column="73" />
           <folding>
-            <marker date="1554807704000" expanded="true" signature="6075:6945" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="11280:11688" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="12825:14259" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="11335:11743" ph="..." />
           </folding>
         </state>
       </provider>
@@ -502,9 +482,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1554807704000" expanded="true" signature="6075:6945" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="11280:11688" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="12825:14259" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="11335:11743" ph="..." />
           </folding>
         </state>
       </provider>
@@ -645,17 +625,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tgdc_mutationset.tsv">
       <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="0">
@@ -665,14 +634,6 @@
       </provider>
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/impact_results.json">
@@ -691,10 +652,143 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/work.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/results.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1700">
+          <caret line="245" column="17" lean-forward="false" selection-start-line="245" selection-start-column="17" selection-end-line="245" selection-end-column="17" />
+          <folding>
+            <marker date="1554808173000" expanded="true" signature="6:17" ph="{&quot;message&quot;: &quot;id not found&quot;...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config_home.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="47" lean-forward="false" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mutations.2019-01-23.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-612">
+          <caret line="165" column="30" lean-forward="true" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/V87_38_MUTANT.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="153" lean-forward="false" selection-start-line="1" selection-start-column="144" selection-end-line="1" selection-end-column="153" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tcga tissue parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="38" column="47" lean-forward="false" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep_input.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/VEP_output.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gdc_api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding>
+            <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fathmm.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding>
+            <element signature="e#118#132#0" expanded="true" />
+            <marker date="1554823437000" expanded="true" signature="267:1190" ph="..." />
+            <marker date="1554823437000" expanded="true" signature="2259:2371" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vep_parse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1316">
+          <caret line="2" column="18" lean-forward="false" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+          <folding>
+            <marker date="1554823437000" expanded="true" signature="1146:1206" ph="import ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/dbinsert_module.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="656">
-          <caret line="326" column="30" lean-forward="false" selection-start-line="326" selection-start-column="30" selection-end-line="326" selection-end-column="30" />
+        <state relative-caret-position="171">
+          <caret line="56" column="51" lean-forward="true" selection-start-line="56" selection-start-column="51" selection-end-line="56" selection-end-column="51" />
           <folding>
             <marker date="1553179208000" expanded="true" signature="7995:8023" ph="..." />
             <marker date="1553179208000" expanded="true" signature="8022:8023" ph="..." />
@@ -705,32 +799,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mutation_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="327" column="0" lean-forward="false" selection-start-line="327" selection-start-column="0" selection-end-line="327" selection-end-column="0" />
+        <state relative-caret-position="-2329">
+          <caret line="15" column="52" lean-forward="true" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
           <folding>
-            <marker date="1554807704000" expanded="true" signature="6075:6945" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="11280:11688" ph="..." />
-            <marker date="1554807704000" expanded="true" signature="12825:14259" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gdc_api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
-          <folding>
-            <marker date="1554808083000" expanded="true" signature="3181:3182" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/results.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1700">
-          <caret line="245" column="17" lean-forward="false" selection-start-line="245" selection-start-column="17" selection-end-line="245" selection-end-column="17" />
-          <folding>
-            <marker date="1554808173000" expanded="true" signature="6:17" ph="{&quot;message&quot;: &quot;id not found&quot;...}" />
+            <marker date="1554818891000" expanded="true" signature="6075:6987" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="8261:8441" ph="..." />
+            <marker date="1554818891000" expanded="true" signature="11335:11743" ph="..." />
           </folding>
         </state>
       </provider>

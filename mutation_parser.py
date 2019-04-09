@@ -152,6 +152,7 @@ def cosmicParser(my_gene, csv_file):
         for row in csv_reader:
             try:
                 gene_name       = row[0]
+                gene_number     = row[1]
                 genomic_id      = row[23]
                 coding          = 'y'
                 protein         = row[18]
@@ -159,7 +160,7 @@ def cosmicParser(my_gene, csv_file):
                 protein         = protein.replace('p.', '')
                 res_num          = ''
                 cds             = row[17]
-                cds             = cds.replace('c.', '')
+                #cds             = cds.replace('c.', '')
                 description     = row[19].lower()          # parse out type and consequence below
                 organism        = 'Homo sapiens'
                 domain          = d.domainMapper(protein)   # calls domain mapping function
@@ -198,7 +199,7 @@ def cosmicParser(my_gene, csv_file):
 
             if protein != '?' and gene_name == my_gene:  ## check that gene is KIF11, don't include ? for aa_change
                 mutation_dict[protein] = (res_num, genomic_id, coding, cds, mutation_type, consequence, organism, domain,
-                                          source_db, source_id, fathmm_score, fathmm_pred, gene_name)
+                                          source_db, source_id, fathmm_score, fathmm_pred, gene_name, gene_number)
 
 
     file.close()
