@@ -20,7 +20,7 @@ Description:
 ============
 This program parses VEP (Variant Effect Predictor) files (https://www.ensembl.org/info/docs/tools/vep/index.html) 
 for missing impact results. It includes functions to create an input file for VEP webservice from the cosmic database
-mutation text file and a function to parse the output file from VEP.
+mutation text file and a function to parse the output file from VEP and update mysql database tables.
 
 Usage:
 ======
@@ -165,29 +165,26 @@ if __name__ == "__main__":
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     insert_list = []
+    query = "SELECT protein FROM mutation WHERE cds = %s ;"
     for x in new_list:
         mutation = str.format(x[0])
         #print(mutation)
         with cnx.cursor() as cursor:
-            query = "SELECT protein FROM mutation WHERE cds = %s ;"
-
             cursor.execute(query, (mutation))
             temp = cursor.fetchone()
         # inserts amino acid change as first element of list
         x.insert(6, temp[0])
         x.pop(0)
         insert_list.append(x)
-    print(insert_list)
+    #print(insert_list)
 
-    # for y in insert_list:
-    #
-    #
-    #     with cnx.cursor() as cursor:
-    #
-    #         sql_impact = "UPDATE impact (vep, polyphen_prediction, polyphen_score, sift_prediction, sift_score) \
-    #                     VALUES (%s,%s,%s,%s,%s) WHERE mutation_id = %s ;"
-
-        #insert_list = [x[1], x[2], x[3], x[4], x[5]]
-
-    #INSERT impact(vep, polyphen_prediction, polyphen_score, sift_prediction, sift_score)
-    #VALUES(
+    sql_impact = "UPDATE impact SET vep = %s , polyphen_prediction = %s , polyphen_score =  %s , sift_prediction =  %s ,"\
+                    "sift_score =  %s  WHERE mutation_id = %s;"
+    i = 0
+    for x in insert_list:
+        with cnx.cursor() as cursor:
+            rows = cursor.execute(sql_impact, x)
+            i += 1
+    cnx.commit()
+    cnx.close()
+    print(i)
