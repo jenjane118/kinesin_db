@@ -118,7 +118,7 @@ CREATE table										impact
 																									NOT NULL,
 			fathmm_prediction					VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
-			clinvar_prediction					VARCHAR(25)				DEFAULT 'UNK'
+			clinvar_prediction					VARCHAR(25)				DEFAULT 'N/A'
 																									NOT NULL,
 			PRIMARY KEY (mutation_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
