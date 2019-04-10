@@ -185,7 +185,7 @@ def updateImpact(impact_list):
 
     insert_list = []
 
-    # use cds to obtain mutation_id from mutation table
+    # use cds to obtain mutation_id from impact list
     query = "SELECT protein FROM mutation WHERE cds = %s ;"
     for x in impact_list:
         mutation = str.format(x[0])         # retrieve mutation (cds) from parsed impact list
@@ -193,9 +193,9 @@ def updateImpact(impact_list):
             cursor.execute(query, (mutation))
             temp = cursor.fetchone()
 
-        # inserts amino acid change as first element of list
+        # inserts amino acid change as last element of list
         x.insert(6, temp[0])
-        # remove cds from end of list
+        # remove cds from beginning of list
         x.pop(0)
         insert_list.append(x)
     #print(insert_list)
