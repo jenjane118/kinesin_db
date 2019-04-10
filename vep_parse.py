@@ -174,8 +174,6 @@ def updateImpact(impact_list):
     Input                   impact_list                     List of attributes for update of impact table
     Output                  i                               number of updated rows
     """
-# now need to make query that matches cds attribute and gets mutation id from mutation table
-    # then use mutation id to insert into impact table
 
     # Connect to MySQL Database
     cnx = pymysql.connect(host=config_home.database_config['dbhost'],
@@ -186,15 +184,18 @@ def updateImpact(impact_list):
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     insert_list = []
+
+    # use cds to obtain mutation_id from mutation table
     query = "SELECT protein FROM mutation WHERE cds = %s ;"
     for x in impact_list:
-        mutation = str.format(x[0])
-        #print(mutation)
+        mutation = str.format(x[0])         # retrieve mutation (cds) from parsed impact list
         with cnx.cursor() as cursor:
             cursor.execute(query, (mutation))
             temp = cursor.fetchone()
+
         # inserts amino acid change as first element of list
         x.insert(6, temp[0])
+        # remove cds from end of list
         x.pop(0)
         insert_list.append(x)
     #print(insert_list)
