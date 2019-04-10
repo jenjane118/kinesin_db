@@ -100,7 +100,7 @@ def getVepInput(csv_file, results_file):
 
 # ******************************************************************************
 
-def parseVep(my_gene, vep_input, vep_file):
+def parseVep(my_gene, vep_file):
     """ Parse VEP flatfile results (downloaded after using webservice (https://www.ensembl.org/Multi/Tools/VEP?db=core)
     with file from getVepInput function) to get VEP, sift and polyphen predictions and scores for entry to kinesin
     database impact table.
@@ -221,9 +221,10 @@ if __name__ == "__main__":
     cosmic_file = 'V87_38_MUTANT.csv'
 
 
-    input_file = getVepInput(cosmic_file, 'vep_input.txt')
+    input_file = getVepInput(cosmic_file, 'vep_input2.txt')
 
-    impact = parseVep(gene, 'vep_input.txt', 'vep_output.txt')
+    impact = parseVep(gene, 'VEP_output2.txt')
+    print(impact)
 
-    updateImpact(impact)
-
+    number = updateImpact(impact)
+    print(number)
