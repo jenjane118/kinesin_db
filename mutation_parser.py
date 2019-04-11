@@ -173,7 +173,7 @@ def cosmicParser(my_gene, csv_file):
                 fathmm_score    = row[27]
                 fathmm_pred     = row[28]
 
-            except Error as e:
+            except NameError as e:
                 print("Error", e)
 
             # only use initial genomic position coordinate
