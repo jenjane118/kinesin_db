@@ -39,22 +39,30 @@ V1.2    09.04.19        Update impact table with vep                    JJS
 import sys
 import pymysql
 import config_kinesin
-#import config_home
+import config_home
 import mutation_parser
 
 
 # ******************************************************************************
-def insertCosmicSource(mutation_dict):
+def insertCosmicSource(mutation_dict, database):
     """Inserts entries from Cosmic mutations into source_info table.
-    Input               mutation_dict         dictionary of attributes from Cosmic csv file
-    Output                                  inserted row into db source_info table
+    Input               mutation_dict           dictionary of attributes from Cosmic csv file
+                        database                database: kenobi or home
+    Output                                      inserted row into db source_info table
     """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host  =config_kinesin.database_config['dbhost'],
-                          #port  =config_kinesin.database_config['port'],
-                          user  =config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db    =config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
@@ -75,17 +83,25 @@ def insertCosmicSource(mutation_dict):
     cnx.close()
 
 # ******************************************************************************
-def insertMutation(mutations):
+def insertMutation(mutations, database):
     """Inserts entry into mutation table.
     Input               mutations           list of attributes from gdc
+                        database            kenobi or home
     Output                                  inserted row into db
     """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is local home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_mutation = "INSERT INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
@@ -98,17 +114,25 @@ def insertMutation(mutations):
     cnx.commit()
     cnx.close()
 # ******************************************************************************
-def insertSource(mutations):
+def insertSource(mutations, database):
     """Inserts entry into source table.
     Input               mutations           list of mutations from gdc
+                        database            database used: kenobi or home
     Output                                  inserted row into db
     """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
@@ -121,17 +145,27 @@ def insertSource(mutations):
     cnx.close()
 # ******************************************************************************
 
-def insertCombinedImpact(impact):
+def insertCombinedImpact(impact, database):
     """Inserts entry into impact table.
     Input               impact                  list of combined entries for impact table
+                        database                home or kenobi database
     Output                                      inserted row into impact table
     """
     # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_impact = "INSERT INTO impact (mutation_id, vep, sift_prediction, polyphen_prediction, " \
@@ -147,18 +181,27 @@ def insertCombinedImpact(impact):
 
 # ******************************************************************************
 
-def insertGdcImpact(mutations):
+def insertGdcImpact(mutations, database):
     """Inserts entry into impact table.
     Input               impact                  list of mutation attributes from gdc
+                        database                home or kenobi database
     Output                                      inserted row into impact table
                         i                       number of inserted rows
     """
-    # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_impact = "INSERT IGNORE impact (mutation_id, vep, sift_prediction, polyphen_prediction) VALUES(%s,%s,%s,%s)"
@@ -174,19 +217,30 @@ def insertGdcImpact(mutations):
 
 # ******************************************************************************
 
-def insertCosmicTissue(cos_tissue_list):
+def insertCosmicTissue(cos_tissue_list, database):
     """Inserts entry into tissue table.
     Input               mutation_tissue             list of mutation attributes from cosmic
+                        database                    home or kenobi database
     Output                                          inserted row into tissue table
     """
     # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
+    ## must be ignore or get duplicate entry exception
     sql_tissue = "INSERT IGNORE tissue (mutation_id, sample_id, tissue_type, cancer_type) VALUES(%s,%s,%s,%s)"
 
     tissue_line = []
@@ -201,17 +255,26 @@ def insertCosmicTissue(cos_tissue_list):
 
 # ******************************************************************************
 
-def insertCosmicMutation(mutation_dict):
+def insertCosmicMutation(mutation_dict, database):
     """Inserts entry into mutation table. (have to do each table in sep function to avoid foreign key constraints)
     Input               mutation_dict       dictionary of attributes from Cosmic csv file
+                        database            use kenobi or home database
     Output                                  inserts attributes into mutation table
     """
     # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     # insert mutation attributes from cosmic, will replace earlier entry with more complete info from cosmic
@@ -241,17 +304,27 @@ def insertCosmicMutation(mutation_dict):
     return i
 
 # ******************************************************************************
-def insertCosmicImpact(mutation_dict):
+def insertCosmicImpact(mutation_dict, database):
     """Inserts entry into mutation table. (have to do each table in sep function to avoid foreign key constraints)
     Input               mutation_dict       dictionary of attributes from Cosmic csv file
+                        database            home or kenobi database
     Output                                  inserts attributes into impact table
     """
     # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          #port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     # insert impact attributes for mutations in cosmic but ignore mutations already in db
@@ -277,18 +350,27 @@ def insertCosmicImpact(mutation_dict):
 
 # ******************************************************************************
 
-def insertGdcTissue(tissue_list):
+def insertGdcTissue(tissue_list, database):
     """Inserts entry into impact table.
     Input               tissue_list             list of mutation attributes from gdc for tissue
+                        database                home or kenobi database
     Output                                      inserted row into impact table
                         i                       number of inserted rows
     """
     # Connect to MySQL database
-    cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
-                          port=config_kinesin.database_config['port'],
-                          user=config_kinesin.database_config['dbuser'],
-                          passwd=config_kinesin.database_config['dbpass'],
-                          db=config_kinesin.database_config['dbname'])
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     sql_tissue = "INSERT IGNORE tissue (mutation_id, sample_id, tissue_type, cancer_type) VALUES(%s,%s,%s,%s)"
@@ -314,15 +396,14 @@ if __name__ == "__main__":
     cos_tissue_list = mutation_parser.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
     tissueGDC       = mutation_parser.tissueGDC('KIF11', 'results.json')
 
+    db = 'home'
     # insert commands must be in this order
-    insertMutation(gdc_att)
-    insertCosmicMutation(cosmic_mutation)
-    insertSource(gdc_att)
-    insertCosmicSource(cosmic_mutation)
-    insertCombinedImpact(impact_all)
-    insertGdcImpact(gdc_att)
-    insertCosmicImpact(cosmic_mutation)
-
-    insertCosmicTissue(cos_tissue_list)
-
-    insertGdcTissue(tissueGDC)
+    insertMutation(gdc_att, db)
+    insertCosmicMutation(cosmic_mutation, db)
+    insertSource(gdc_att, db)
+    insertCosmicSource(cosmic_mutation, db)
+    insertCombinedImpact(impact_all, db)
+    insertGdcImpact(gdc_att, db)
+    insertCosmicImpact(cosmic_mutation, db)
+    insertCosmicTissue(cos_tissue_list, db)
+    insertGdcTissue(tissueGDC, db)
