@@ -40,6 +40,7 @@ import csv
 import re
 import config_home
 import pymysql
+import config_kinesin
 
 #*****************************************************************************
 
@@ -84,18 +85,28 @@ def parseClinvar(gene, csv_file):
 
 # ******************************************************************************
 
-def clinvarUpdate(clinvar_list):
+def clinvarUpdate(clinvar_list, database):
     """ This function uses list of clinvar attributes to update impact table in kinesin database.
     Input               clinvar_list                    list of attributes (genomic location, clinical significance)
+                        database                        which database used
     Output              count                           number of successfully updated rows in impact table
     """
 
-    # Connect to MySQL Database
-    cnx = pymysql.connect(host=config_home.database_config['dbhost'],
-                          port=config_home.database_config['port'],
-                          user=config_home.database_config['dbuser'],
-                          passwd=config_home.database_config['dbpass'],
-                          db=config_home.database_config['dbname'])
+
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     impact_list = []
@@ -133,8 +144,10 @@ if __name__ == "__main__":
     mygene = 'KIF11'
     myfile = 'clinvar_result.txt'
 
+    db = 'kenobi'
+
     results = parseClinvar(mygene, myfile)
     #print(results)
 
-    successful = clinvarUpdate(results)
+    successful = clinvarUpdate(results, db)
     print(successful)
