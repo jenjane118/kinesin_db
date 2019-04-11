@@ -41,21 +41,31 @@ import mutation_parser as m
 import re
 import config_home
 import pymysql
+import config_kinesin
 
 #*****************************************************************************
 
-def vepScores(gene):
+def vepScores(gene, database):
     """This function queries the kinesin database for list of mutations that need vep scores.
     Input                   gene                       desired gene ('KIF11')
+                            database                    kenobi or home database
     Output                  vep_list
     """
 
-    # Connect to MySQL Database
-    cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                          user=config_kinesin.database_config['dbuser'],
+                          passwd=config_kinesin.database_config['dbpass'],
+                          db=config_kinesin.database_config['dbname'])
+    else:
+    ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
                           port=config_home.database_config['port'],
                           user=config_home.database_config['dbuser'],
                           passwd=config_home.database_config['dbpass'],
                           db=config_home.database_config['dbname'])
+
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
     vep_dict = {}
@@ -106,7 +116,6 @@ def parseVep(my_gene, vep_file):
     database impact table.
 
     Input               my_gene                 Gene of interest (KIF11)
-                        vep_input               file of mutations submitted to VEP
                         vep_file                flat file (results) downloaded from VEP website
     Output              impact_list             list of attributes for impact table update
     """
@@ -168,15 +177,23 @@ def parseVep(my_gene, vep_file):
 
 # *****************************************************************************
 
-def updateImpact(impact_list):
+def updateImpact(impact_list, database):
     """ Connects to kinesin database. Updates relevant entries in impact table with VEP, polyphen and sift predictions.
     First must find mutation_id for each entry based on cds attribute from impact_list. Use this to update impact table.
     Input                   impact_list                     List of attributes for update of impact table
+                            database                        home or kenobi
     Output                  i                               number of updated rows
     """
 
-    # Connect to MySQL Database
-    cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+    # Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+    ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
                           port=config_home.database_config['port'],
                           user=config_home.database_config['dbuser'],
                           passwd=config_home.database_config['dbpass'],
@@ -188,7 +205,9 @@ def updateImpact(impact_list):
     # use cds to obtain mutation_id from impact list
     query = "SELECT protein FROM mutation WHERE cds = %s ;"
     for x in impact_list:
-        mutation = str.format(x[0])         # retrieve mutation (cds) from parsed impact list
+        cdc = ''
+        mutation = str.format(x[0])  # retrieve mutation (cds) from parsed impact list
+        mutation = 'c.'+ mutation      # change to format for cosmic mutations (tcga already have vep scores)
         with cnx.cursor() as cursor:
             cursor.execute(query, (mutation))
             temp = cursor.fetchone()
@@ -222,10 +241,10 @@ if __name__ == "__main__":
     cosmic_file = 'V87_38_MUTANT.csv'
 
 
-    input_file = getVepInput(cosmic_file, 'vep_input2.txt')
+    #input_file = getVepInput(cosmic_file, 'vep_input2.txt')
 
-    impact = parseVep(gene, 'VEP_output2.txt')
+    impact = parseVep(gene, 'VEP_output.txt')
     print(impact)
 
-    number = updateImpact(impact)
+    number = updateImpact(impact, 'home')
     print(number)
