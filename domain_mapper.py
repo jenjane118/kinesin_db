@@ -36,6 +36,58 @@ V1.0    29.01.10        Initial version                             By: JJS
 
 import re
 import sys
+import pymysql
+import config_home
+
+# ******************************************************************************
+
+def getMutations(database):
+
+# Connect to MySQL Database (kinesin on kenobi)
+    if database == 'kenobi':
+        cnx = pymysql.connect(host=config_kinesin.database_config['dbhost'],
+                              user=config_kinesin.database_config['dbuser'],
+                              passwd=config_kinesin.database_config['dbpass'],
+                              db=config_kinesin.database_config['dbname'])
+    else:
+        ## if database is home mysql database
+        cnx = pymysql.connect(host=config_home.database_config['dbhost'],
+                              port=config_home.database_config['port'],
+                              user=config_home.database_config['dbuser'],
+                              passwd=config_home.database_config['dbpass'],
+                              db=config_home.database_config['dbname'])
+
+    cursor = cnx.cursor(pymysql.cursors.DictCursor)
+
+    mutation_list = []
+
+    # query list of mutations:  aa_num, sample_id, tissue_type
+    query = "SELECT protein FROM mutation m  WHERE m.consequence = 'missense';"
+            #"AND t.tissue_type in ('Rectum', 'Colon', 'large_intestine')"
+            #"AND m.protein = t.mutation_id;"
+
+    with cnx.cursor() as cursor:
+        cursor.execute(query)
+        temp = cursor.fetchall()
+
+    # print string for each mutation to text file
+    with open ('missense.txt', 'w') as outfile:
+        mutation_string = ''
+
+        for x in temp:
+            #residue_list = temp.read().splitlines()
+            #for row in temp:
+
+            mutation_string = str(x[0])
+            mutation_list.append(mutation_string)
+        for y in mutation_list:
+            print(y, end=' ', file=outfile)
+
+
+    return mutation_list
+
+
+
 
 # ******************************************************************************
 
@@ -54,6 +106,10 @@ def domainMapper(mutation):
             domain_dict[str(x)] = 'kinesin motor'
         elif x in range(916, 1053): #> 915 and x < 1054:
             domain_dict[str(x)] = 'microtubule-binding'
+        elif x in range(751, 885):
+            domain_dict[str(x)] = 'idr1'
+        elif x in range(422, 496):
+            domain_dict[str(x)] = 'idr2'
         else:
             domain_dict[str(x)] = 'coiled-coil/disorder'
 
@@ -75,5 +131,21 @@ def domainMapper(mutation):
 
 if __name__ == "__main__":
 
-    p = domainMapper('A366T')
-    print(p)
+    with open('missense.txt', 'r') as file:
+        residue_list = file.read().splitlines()
+        print(residue_list)
+        idr1_list = []
+        idr2_list = []
+        for row in residue_list:
+            p = domainMapper(row)
+            if p == 'idr1':
+                idr1_list.append(row)
+            elif p == 'idr2':
+                idr2_list.append(row)
+            else:
+                pass
+        print(len(idr1_list))
+        print(len(idr2_list))
+    with open('idr1_mutations.txt', 'w') as outfile:
+        for x in idr1_list:
+            print(str(x), end=' ', file=outfile)
