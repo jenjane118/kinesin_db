@@ -68,8 +68,6 @@ CREATE table										mutation
 CREATE table										source_info
 (			source_id								VARCHAR(100)				NOT NULL,
 			source_db								VARCHAR(25)				NOT NULL,
-			transcript_id							VARCHAR(100)				DEFAULT 'N/A'
-																									NOT NULL,
             mutation_id								VARCHAR(45)				NOT NULL,
 			PRIMARY KEY (source_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
@@ -88,16 +86,16 @@ CREATE table										source_info
 --            FOREIGN KEY (mutation_id) REFERENCES mutation (mutation_id) ON DELETE CASCADE
 -- )ENGINE=InnoDB;
 
-
-CREATE table										frequency
-(			mutation_id								VARCHAR(45)				NOT NULL,
-			gdc_freq								VARCHAR(10)				DEFAULT 'UNK'
-																			NOT NULL,
-			cosmic_freq                             VARCHAR(10)             DEFAULT 'UNK'
-			                                                                NOT NULL,
-			PRIMARY KEY (mutation_id),
-            FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
-)ENGINE=InnoDB;
+-- deleted frequency table: not relevant
+--CREATE table										frequency
+--(			mutation_id								VARCHAR(45)				NOT NULL,
+--			gdc_freq								VARCHAR(10)				DEFAULT 'UNK'
+--																			NOT NULL,
+--			cosmic_freq                             VARCHAR(10)             DEFAULT 'UNK'
+--			                                                                NOT NULL,
+--			PRIMARY KEY (mutation_id),
+--            FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
+--)ENGINE=InnoDB;
 
 
 CREATE table										impact
@@ -133,8 +131,10 @@ CREATE table										impact
 			provean_pred                        VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
 			revel_rank                          VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
 			revel_score                         VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
-			clinvar_prediction					VARCHAR(25)				DEFAULT 'N/A'
-																									NOT NULL
+			fathmm_cancer_score                 VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
+			fathmm_cancer_pred                  VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
+            clinvar_prediction					VARCHAR(25)				DEFAULT 'UNK'               NOT NULL,
+
 			PRIMARY KEY (mutation_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
 )ENGINE=InnoDB;
@@ -154,7 +154,7 @@ CREATE table										tissue
 -- materialised view created for user interface: includes only coding mutations for given gene (kinesin)
 -- in future can expand to create new views for each gene (kinesin) or for non-coding mutations (CNVs)
 CREATE VIEW vKif11_coding_mut AS 
-			SELECT 	g.gene_name, g.organism, m.genomic, cds, protein, mutation_type, consequence, domain, custom_score
+			SELECT 	g.gene_name, g.organism, m.genomic, cds, protein, mutation_type, consequence, domain
             FROM 	gene g, mutation m, impact i
             WHERE 	m.coding = 'Y'
             AND		g.gene_name = m.gene_name
