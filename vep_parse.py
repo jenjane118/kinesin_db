@@ -18,8 +18,8 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program parses VEP (Variant Effect Predictor) files (https://www.ensembl.org/info/docs/tools/vep/index.html) 
-for missing impact results. It includes functions to create an input file for VEP webservice from the cosmic database
+This program parses VEP (Variant Effect Predictor) files (https://www.ensembl.org/Homo_sapiens/Tools/VEP) 
+for impact results. It includes functions to create an input file for VEP webservice from the cosmic database
 mutation text file and a function to parse the output file from VEP and update mysql database tables.
 
 Usage:
@@ -28,8 +28,11 @@ vep_parse                SELF
 
 Revision History:
 =================
-V1.0    09.04.19        Initial                                     By: JJS
-
+V1.0    09.04.19        Initial                                                 By: JJS
+V1.2    10.06.19        Expand to parse more complete file using VEP website        JJS
+                        Will start over to insert data in new impact table versus 
+                        updating. 
+v1.3    11.06.19        Finalised VEP parsing/insertion for all substitutions.      JJS
 """
 
 #
@@ -46,10 +49,11 @@ import config_kinesin
 #*****************************************************************************
 
 def vepScores(gene, database):
-    """This function queries the kinesin database for list of mutations that need vep scores.
+    """This function queries the kinesin database for list of mutations and formats
+    for the VEP webservice. (https://www.ensembl.org/Tools/VEP)
     Input                   gene                       desired gene ('KIF11')
-                            database                    kenobi or home database
-    Output                  vep_list
+                            database                   kenobi or home database
+    Output                  vep_list                   list of mutations in HGNS format
     """
 
     # Connect to MySQL Database (kinesin on kenobi)
@@ -68,51 +72,35 @@ def vepScores(gene, database):
 
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    vep_dict = {}
+    mut_str = ''
+    sub = ''
+    nucl_sub = ''
     vep_list = []
     with cnx.cursor() as cursor:
-        query = "SELECT mutation_id FROM impact WHERE vep = 'UNK';"
+        query = "SELECT genomic, cds FROM mutation WHERE mutation_type = 'substitution';"
         cursor.execute(query)
         temp = cursor.fetchall()
 
     for x in temp:
-        vep_list.append(x[0])
+        genomic = str(x[0])
+        genomic = genomic.replace('10:', '')
+        sub = str(x[1])
+        p = re.compile(r'(\w>\w)$')
+        it = p.finditer(sub)
+        for match in it:
+            nucl_sub = match[0]
+
+        mut_str = 'chr10:g.' + genomic + nucl_sub
+
+        vep_list.append(mut_str)
 
     return vep_list
 
-#*****************************************************************************
+# *****************************************************************************
 
-def getVepInput(csv_file, results_file):
-    """ This function runs mutation_parser.cosmicParser function to extract 'gene number' and cds from
-    cosmic download file to make a list of mutations in correct format to submit to VEP webservices
-    (https://www.ensembl.org/Multi/Tools/VEP?db=core).
-
-    Input                   csv_file                flat file COSMIC mutations (downloaded)
-                            results_file            name of outfile for submitting to VEP
-    Output                  outfile                 file of mutations in correct format for submission to webservices
-    """
-
-    # run vepScores function to query kinesin database for entries lacking VEP predictions
-    veps = vepScores(gene)
-
-    # run m.cosmicParser and extract gene_number and cds from resulting mutation dictionary to make list of mutations
-    line = ''
-    with open(results_file, 'w') as outfile:
-        mut_dict = m.cosmicParser(gene, csv_file)
-        for mutation in veps:
-            if mutation in mut_dict:
-                number  = str(mut_dict[mutation][13])       #'gene number' = ensembl id (ENST00000260731)
-                code    = str(mut_dict[mutation][3])        # cds
-                line = number + ':' + code
-                print(line, file=outfile)
-
-    return outfile
-
-# ******************************************************************************
-
-def parseVep(my_gene, vep_file):
+def parseVep2(my_gene, vep_file):
     """ Parse VEP flatfile results (downloaded after using webservice (https://www.ensembl.org/Multi/Tools/VEP?db=core)
-    with file from getVepInput function) to get VEP, sift and polyphen predictions and scores for entry to kinesin
+    with file from getVepInput function) to get all predictions and scores for entry to kinesin
     database impact table.
 
     Input               my_gene                 Gene of interest (KIF11)
@@ -120,65 +108,96 @@ def parseVep(my_gene, vep_file):
     Output              impact_list             list of attributes for impact table update
     """
 
-    vep_entry       = []
-    vep_impact_list = []
+    vep2_entry       = []
+    new_entry       = []
+    vep2_impact_list = []
     # open csv file
-    with open(vep_file, 'r') as file:
-        vep_reader = csv.reader(file, delimiter='\t')
+    with open(vep_file, newline='') as file:
+        vep_reader = csv.DictReader(file, delimiter='\t')
         for row in vep_reader:
-            gene_name   = row[5]        #'KIF11'
-            mutation    = row[0]        # mutation id (gene:cds)
-            vep_impact  = row[4]        # prediction only
-            sift        = row[27]       # includes prediction and score in one entry
-            polyphen    = row[28]       # incl prediction and score in one entry
-            # except Error as e:
-            #     print("Error", e)
+            for k in row:
+                if row[k] == '-':
+                    row[k] = 'NA'
+            try:
+                gene_name       = row['SYMBOL']        #'KIF11'
+                resnum          = row['Protein_position']
+                aa_sub          = row['Amino_acids']
+                if len(aa_sub)==1:
+                    mutation = str(aa_sub + resnum + aa_sub)
+                else:
+                    q = re.compile(r'^(.*)/(.*)')
+                    it = q.finditer(aa_sub)
+                    for match in it:
+                        aa1 = match.group(1)
+                        aa2 = match.group(2)
+                        mutation        = str(aa1+resnum+aa2)
+                genomic         = row['#Uploaded_variation']        # mutation id (gene:genomic)
+                # ## remove ENST gene info so can use to search db for cds attribute and pop missing info into impact table
+                # p = re.compile(r'^chr')
+                # genomic = p.sub('', genomic)
+                # q = re.compile(r'g\.')
+                # genomic = q.sub('', genomic)
+                sift            = row['SIFT']
+                if sift != 'NA':
+                    s = re.compile(r'^(.*)\((.*)\)')
+                    it = s.finditer(sift)
+                    for match in it:
+                        sift_pred = match.group(1)
+                        sift_score = match.group(2)
+                polyphen        = row['PolyPhen']
+                if polyphen != 'NA':
+                    it = s.finditer(polyphen)
+                    for match in it:
+                        polyphen_pred = match.group(1)
+                        polyphen_score = match.group(2)
+                condel          = row['Condel']
+                if condel != 'NA':
+                    it = s.finditer(condel)
+                    for match in it:
+                        condel = match.group(2)    # only interested in score
+                cadd_raw        = row['CADD_raw']
+                cadd_rank       = row['CADD_raw_rankscore']
+                fathmm_rank     = row['FATHMM_converted_rankscore']
+                fathmm_score    = row['FATHMM_score']
+                fathmm_pred     = row['FATHMM_pred']
+                metaSVM_pred    = row['MetaSVM_pred']
+                metaSVM_rank    = row['MetaSVM_rankscore']
+                metaSVM_score   = row['MetaSVM_score']
+                mutpred_rank    = row['MutPred_rankscore']
+                mutpred_score   = row['MutPred_score']
+                mutassess_pred  = row['MutationAssessor_pred']
+                mutassess_score = row['MutationAssessor_score']
+                mutassess_rank  = row['MutationAssessor_score_rankscore']
+                mutaster_rank   = row['MutationTaster_converted_rankscore']
+                mutaster_pred   = row['MutationTaster_pred']
+                mutaster_score  = row['MutationTaster_score']
+                provean_rank    = row['PROVEAN_converted_rankscore']
+                provean_score   = row['PROVEAN_score']
+                provean_pred    = row['PROVEAN_pred']
+                revel_rank      = row['REVEL_rankscore']
+                revel_score     = row['REVEL_score']
+            except NameError as e:
+                print("Error", e)
+
             if gene_name == my_gene:  ## check that gene is KIF11
-                vep_entry = [mutation, vep_impact, sift, polyphen]
-                vep_impact_list.append(vep_entry)
+                vep2_entry = [mutation, sift_pred, sift_score, polyphen_pred, polyphen_score, condel,\
+                              cadd_raw, cadd_rank,\
+                              fathmm_score, fathmm_rank, fathmm_pred,\
+                              metaSVM_score, metaSVM_rank, metaSVM_pred,\
+                              mutpred_score, mutpred_rank,\
+                              mutassess_score, mutassess_rank, mutassess_pred,\
+                              mutaster_score, mutaster_rank, mutaster_pred,\
+                              provean_score, provean_rank, provean_pred,\
+                              revel_score, revel_rank]
 
-    # reformat to be a 4 attribute list for each entry suitable for updating impact table
-        impact_list = []
-        new_entry = []
+                vep2_impact_list.append(vep2_entry)
 
-        for entry in vep_impact_list:
-            mutation = str(entry[0])
-            ## remove ENST gene info so can use to search db for cds attribute and pop missing info into impact table
-            p = re.compile(r'^ENST00000260731:c\.')
-            mutation = p.sub('', mutation)
-            vep = str(entry[1])
-            ## need to parse out score and prediction from combined entry in vep results file
-            polyphen = str(entry[2])
-            if polyphen == '-':
-                poly_pred = 'UNK'
-                poly_score = 'UNK'
-            else:
-                q = re.compile(r'^(.*)\((.*)\)')
-                it = q.finditer(polyphen)
-                for match in it:
-                    poly_pred = match.group(1)
-                    poly_score = match.group(2)
-
-            sift = str(entry[3])
-            if sift == '-':
-                sift_pred = 'UNK'
-                sift_score = 'UNK'
-            else:
-                s = re.compile(r'^(.*)\((.*)\)')
-                it = s.finditer(sift)
-                for match in it:
-                    sift_pred = match.group(1)
-                    sift_score = match.group(2)
-
-            new_entry = [mutation, vep, poly_pred, poly_score, sift_pred, sift_score]
-            impact_list.append(new_entry)
-
-    return impact_list
+    return vep2_impact_list
 
 # *****************************************************************************
 
-def updateImpact(impact_list, database):
-    """ Connects to kinesin database. Updates relevant entries in impact table with VEP, polyphen and sift predictions.
+def updateImpact2(impact_list, database):
+    """ Connects to kinesin database. Updates relevant entries in impact table with all metrics from VEP.
     First must find mutation_id for each entry based on cds attribute from impact_list. Use this to update impact table.
     Input                   impact_list                     List of attributes for update of impact table
                             database                        home or kenobi
@@ -200,29 +219,15 @@ def updateImpact(impact_list, database):
                           db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    insert_list = []
+    sql_impact = "INSERT IGNORE impact (mutation_id, polyphen_pred, polyphen_score, sift_pred, sift_score,"\
+                    "condel, cadd_score, cadd_rank, fathmm_score, fathmm_rank, fathmm_pred,"\
+                    "metaSVM_score, metaSVM_rank, metaSVM_pred, mutpred_score, mutpred_rank,"\
+                    "mutassessor_score, mutassessor_rank, mutassessor_pred, muttaster_score, muttaster_rank, muttaster_pred,"\
+                    "provean_score, provean_rank, provean_pred, revel_score, revel_rank)\
+                     VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
-    # use cds to obtain mutation_id from impact list
-    query = "SELECT protein FROM mutation WHERE cds = %s ;"
-    for x in impact_list:
-        cdc = ''
-        mutation = str.format(x[0])  # retrieve mutation (cds) from parsed impact list
-        mutation = 'c.'+ mutation      # change to format for cosmic mutations (tcga already have vep scores)
-        with cnx.cursor() as cursor:
-            cursor.execute(query, (mutation))
-            temp = cursor.fetchone()
-
-        # inserts amino acid change as last element of list
-        x.insert(6, temp[0])
-        # remove cds from beginning of list
-        x.pop(0)
-        insert_list.append(x)
-    #print(insert_list)
-
-    sql_impact = "UPDATE impact SET vep = %s , polyphen_prediction = %s , polyphen_score =  %s , sift_prediction =  %s ,"\
-                    "sift_score =  %s  WHERE mutation_id = %s;"
     i = 0
-    for x in insert_list:
+    for x in impact_list:
         with cnx.cursor() as cursor:
             rows = cursor.execute(sql_impact, x)
             i += 1
@@ -238,13 +243,18 @@ def updateImpact(impact_list, database):
 if __name__ == "__main__":
 
     gene = 'KIF11'
-    cosmic_file = 'V87_38_MUTANT.csv'
 
+    #input_list = vepScores(gene, 'home')
 
-    #input_file = getVepInput(cosmic_file, 'vep_input2.txt')
+    #with open ('vep_input.txt', 'w') as outfile:
+    #    for x in input_list:
+    #       print(x, file=outfile)
 
-    impact = parseVep(gene, 'VEP_output.txt')
-    print(impact)
+    # use mutations listed in file in vep webservice (or use command line request)
+    # output from webservice in 'vep_complete_results.txt'
 
-    number = updateImpact(impact, 'home')
+    impact = parseVep2(gene, 'vep_complete_results.txt')
+    number = updateImpact2(impact, 'home')
     print(number)
+
+
