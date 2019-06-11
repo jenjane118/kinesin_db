@@ -144,7 +144,7 @@ if __name__ == "__main__":
     mygene = 'KIF11'
     myfile = 'clinvar_result.txt'
 
-    db = 'kenobi'
+    db = 'home'
 
     results = parseClinvar(mygene, myfile)
     #print(results)
