@@ -27,10 +27,10 @@ dbinsert_module         SELF
 
 Revision History:
 =================
-V1.0    25.01.19        Initial version                             By: JJS
-V1.1    26.01.19        Complete insertion from both databases          JJS
-V1.2    09.04.19        Update impact table with vep                    JJS
-
+V1.0    25.01.19        Initial version                                         By: JJS
+V1.1    26.01.19        Complete insertion from both databases                      JJS
+V1.2    09.04.19        Update impact table with vep                                JJS
+V1.3    11.06.19        Update impact table with complete VEP, clinvar, fathmm      JJS
 """
 
 # ******************************************************************************
@@ -41,6 +41,9 @@ import pymysql
 import config_kinesin
 import config_home
 import mutation_parser
+import clinvar_impact
+import fathhm_impact
+import vep_parse
 
 
 # ******************************************************************************
@@ -392,9 +395,12 @@ if __name__ == "__main__":
 
     gdc_att         = mutation_parser.parseGDC('KIF11', 'mutations.2019-01-23.json')
     cosmic_mutation = mutation_parser.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
-    impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
+    #impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
     cos_tissue_list = mutation_parser.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
     tissueGDC       = mutation_parser.tissueGDC('KIF11', 'results.json')
+    impact          = vep_parse.parseVep2('KIF11', 'vep_complete_results.txt')
+    fathmm_results  = fathhm_impact.fathmmResultsParser('fathmm_results.txt')
+    clinvar_results = clinvar_impact.parseClinvar('KIF11', 'clinvar_result.txt')
 
     db = 'home'
     # insert commands must be in this order
@@ -402,8 +408,8 @@ if __name__ == "__main__":
     insertCosmicMutation(cosmic_mutation, db)
     insertSource(gdc_att, db)
     insertCosmicSource(cosmic_mutation, db)
-    insertCombinedImpact(impact_all, db)
-    insertGdcImpact(gdc_att, db)
-    insertCosmicImpact(cosmic_mutation, db)
+    vep_parse.updateImpact2(impact, db)
+    fathhm_impact.fathmmInsert(fathmm_results, db)
+    clinvar_impact.clinvarUpdate(clinvar_results, db)
     insertCosmicTissue(cos_tissue_list, db)
     insertGdcTissue(tissueGDC, db)
