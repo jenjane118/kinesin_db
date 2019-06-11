@@ -31,6 +31,7 @@ V1.0    25.01.19        Initial version                                         
 V1.1    26.01.19        Complete insertion from both databases                      JJS
 V1.2    09.04.19        Update impact table with vep                                JJS
 V1.3    11.06.19        Update impact table with complete VEP, clinvar, fathmm      JJS
+
 """
 
 # ******************************************************************************
