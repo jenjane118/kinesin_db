@@ -39,8 +39,8 @@ CREATE table										impact
 			provean_pred                        VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
 			revel_rank                          VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
 			revel_score                         VARCHAR(25)             DEFAULT 'UNK'               NOT NULL,
-			clinvar_prediction					VARCHAR(25)				DEFAULT 'N/A'
-																									NOT NULL,
+			clinvar_prediction					VARCHAR(25)				DEFAULT 'UNK'               NOT NULL,
+			median_ranked scores                DECIMAL(10,4)           DEFAULT 'UNK'               NOT NULL,
 			PRIMARY KEY (mutation_id),
             FOREIGN KEY (mutation_id) REFERENCES mutation (protein) ON DELETE CASCADE
 )ENGINE=InnoDB;
