@@ -100,6 +100,7 @@ CREATE table										source_info
 
 CREATE table										impact
 (			mutation_id							VARCHAR(45)				NOT NULL,
+            median_ranked_scores                DECIMAL(10,4)           DEFAULT 'UNK'               NOT NULL,
 			sift_score							VARCHAR(25)				DEFAULT 'UNK'
 																									NOT NULL,
 			sift_pred							VARCHAR(25)				DEFAULT 'UNK'
