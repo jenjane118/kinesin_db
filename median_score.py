@@ -166,7 +166,7 @@ if __name__ == "__main__":
     dict = getScores('home')
 
     medians = calcMedian(dict)
-    
+
 
     rows = insertMedians(medians, 'home')
     print(rows)
