@@ -22,12 +22,13 @@ dbClearResult(rs)
 #disconnect from database
 dbDisconnect(mydb)
 
-
+domain_muts
 # plots of mutation numbers by domain and domain lengths
 names<-c('other', 'motor', 'mt-bind')
 row.names(domain_muts) <- names
-domain_muts <- select(domain_muts, -1)  #remove first column
 
+domain_muts <- select(domain_muts, -1)  #remove first column
+domain_muts
 par_original<- par()
 par(pin=c(3,3),font=2,ps=12, family="sans", cex.main=0.8, cex.lab=0.8, cex.axis=.8, mai=c(1.02, 0.82, 0.82, 0.42))
 par(mfrow=c(1,2))
