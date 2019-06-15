@@ -36,6 +36,7 @@ V1.5    25.01.19        Added file opening and gene specification to    JJS
                         (previously gdc_parser).
 V1.6    21.03.19        Changed tissue table to reflect multiple        JJS
                         samples for one mutation.
+V1.7    15.06.19        Debugged GDCTissue parser for residues >999     JJS
 """
 
 # ******************************************************************************
@@ -239,7 +240,6 @@ def tissueGDC(gene, json_file):
 
     tissue_entry    = []
     tissue_list     = []
-
     source_db = 'GDC'
     my_gene = 'KIF11'
 
@@ -258,15 +258,20 @@ def tissueGDC(gene, json_file):
             except NameError as e:
                 print("Error", e)
 
-            gene_name   = str(mutation_name[2:7])
-            mutation_id = str(mutation_name[8:13])
+            # parse out amino acid mutation
+            p   = re.compile(r'(\w+)\s(\w+)')
+            it  = p.finditer(mutation_name)
+            for match in it:
+                gene_name = str(match.group(1))
+                mutation_id = str(match.group(2))
 
-            if my_gene in gene_name:  ## check that gene is KIF11
+            if my_gene == gene_name:  ## check that gene is KIF11
                 if cosmic_id == 'None':         ## skip entries also recorded in cosmic
                     tissue_entry    = [mutation_id, sample_name, tissue_type, cancer_type]
                     tissue_list.append(tissue_entry)
             else:
                 pass
+
     f.close()
 
     return tissue_list
@@ -333,26 +338,26 @@ if __name__ == "__main__":
 
     #from collections import Counter
 
-    cosmic_tissue = tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
-
-    ## checks for duplicates in an attribute
-    dup_list = []
-    dup_list_source = []
-    mutation_source = ()
-    for x in cosmic_tissue:
-        dup_list.append(x[0])
-
-
-
-    print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
-    #print(list(set([i for i in dup_list_source if dup_list_source.count(i) > 1])))
-    print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
-
-
-    mutation_source = tuple(zip(dup_list, dup_list_source))
-    print(list(set ([i for i in mutation_source if mutation_source.count(i) >1])))
-    print(len(list(set ([i for i in mutation_source if mutation_source.count(i) >1]))))
-
+    # cosmic_tissue = tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
+    #
+    # ## checks for duplicates in an attribute
+    # dup_list = []
+    # dup_list_source = []
+    # mutation_source = ()
+    # for x in cosmic_tissue:
+    #     dup_list.append(x[0])
+    #
+    #
+    #
+    # print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
+    # #print(list(set([i for i in dup_list_source if dup_list_source.count(i) > 1])))
+    # print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
+    #
+    #
+    # mutation_source = tuple(zip(dup_list, dup_list_source))
+    # print(list(set ([i for i in mutation_source if mutation_source.count(i) >1])))
+    # print(len(list(set ([i for i in mutation_source if mutation_source.count(i) >1]))))
+    #
 
 
 
@@ -368,15 +373,14 @@ if __name__ == "__main__":
     # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
     #
 
-    # tissueGDC = tissueGDC('KIF11', 'results.json')
+    tissueGDC = tissueGDC('KIF11', 'results.json')
+
+    dup_list = []
+    for x in tissueGDC:
+        dup_list.append(x[0])
+    print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
     #
-    # dup_list = []
-    # for x in tissueGDC:
-    #     dup_list.append(x[0])
-    # print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
-    # #
-    # print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
-    #
-    # for x in tissueGDC:
-    #     print(x)
-    # print(len(tissueGDC))
+    print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
+
+    print(tissueGDC)
+    print(len(tissueGDC))
