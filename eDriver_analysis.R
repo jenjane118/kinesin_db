@@ -176,11 +176,14 @@ View(res_adj)
 ## use idr1 751-885 to see if enriched (24 mutations)
 idr1 <- eDriver(24, 179, 135, 1056)
 idr1
-# [1] 0.9999995      NOT enriched in this region.
+# 1] 0.4343837     NOT enriched in this region.
 ## idr2 422-496
 idr2 <- eDriver(14, 179, 74, 1056)
 idr2
 #[1] 0.3750199  
+## idr3 937-1056
+
+
 # use only with colon mutations (five mutations from colon)
 idr1_colon <- eDriver(5, 32, 135, 1056)
 idr1_colon
