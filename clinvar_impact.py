@@ -28,8 +28,10 @@ vep_parse                SELF
 
 Revision History:
 =================
-V1.0    10.04.19        Initial                                     By: JJS
-
+V1.0    10.04.19        Initial                                             By: JJS
+V2.0    17.06.19        Changed mutation identification from genomic            JJS
+                        to amino acid substitution (genomic coordinates
+                        differ between databases)
 """
 
 #
@@ -51,22 +53,19 @@ def parseClinvar(gene, csv_file):
                         csv_file            file of Clinvar results returned from web query
     Output              cv_list             list of mutation identifier and clinical significance
     """
-    #new_mutation = ''
-    #mut = ''
-    #clin_sig = ''
+
     cv_entry = []
     cv_list  = []
     # open csv file
     with open(csv_file, 'r') as file:
         csv_reader = csv.DictReader(file, delimiter='\t')
-        #first_row = True
         for row in csv_reader:
-            clin_sig = row['Clinical significance (Last reviewed)']  # clinical significance
+            clin_sig = row['Clinical significance (Last reviewed)']
             # remove review date in parentheses
             r = re.compile(r'\(.*\)$')
             clin_sig = r.sub('', clin_sig)
             mut_name    = row['Name']
-                    ##NM_004523.3(KIF11):c.2T>C (p.Met1Thr)
+            ##NM_004523.3(KIF11):c.2T>C (p.Met1Thr)
             p       = re.compile(r'.+(\(KIF11\)).+p.(\w+)')
             it      = p.finditer(mut_name)
             for match in it:
@@ -88,7 +87,6 @@ def parseClinvar(gene, csv_file):
                     except KeyError:
                         new_aa1 = '*'
                     new_mutation = old_aa1 + resnum + new_aa1
-            #cv_list.append(new_mutation)
                     cv_entry = [clin_sig, new_mutation]
                     cv_list.append(cv_entry)
     return cv_list
@@ -144,7 +142,7 @@ if __name__ == "__main__":
     db = 'home'
 
     results = parseClinvar(mygene, myfile)
-    print(results)
+    #print(results)
 
     successful = clinvarUpdate(results, db)
     print(successful)
