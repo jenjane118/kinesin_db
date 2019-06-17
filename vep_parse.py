@@ -132,12 +132,7 @@ def parseVep2(my_gene, vep_file):
                         aa1 = match.group(1)
                         aa2 = match.group(2)
                         mutation        = str(aa1+resnum+aa2)
-                genomic         = row['#Uploaded_variation']        # mutation id (gene:genomic)
-                # ## remove ENST gene info so can use to search db for cds attribute and pop missing info into impact table
-                # p = re.compile(r'^chr')
-                # genomic = p.sub('', genomic)
-                # q = re.compile(r'g\.')
-                # genomic = q.sub('', genomic)
+                genomic         = row['#Uploaded_variation']       
                 sift            = row['SIFT']
                 if sift != 'NA':
                     s = re.compile(r'^(.*)\((.*)\)')
