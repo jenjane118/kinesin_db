@@ -50,7 +50,8 @@ import config_kinesin
 
 def vepScores(gene, database):
     """This function queries the kinesin database for list of mutations and formats
-    for the VEP webservice. (https://www.ensembl.org/Tools/VEP)
+    for the VEP webservice. (https://www.ensembl.org/Tools/VEP). NOT reliable, as
+    genomic coordinates are different in COSMIC vs TCGA.
     Input                   gene                       desired gene ('KIF11')
                             database                   kenobi or home database
     Output                  vep_list                   list of mutations in HGNS format
