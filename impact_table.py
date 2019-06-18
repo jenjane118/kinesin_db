@@ -7,7 +7,8 @@ Program:    impact_table
 File:       impact_table.py
 Version:    1.0
 Date:       18.06.19
-Function:   Parse VEP, FATHHM and Clinvar files and insert results into impact table of kinesin database
+Function:   Parse VEP, FATHHM and Clinvar files and insert results into impact table of kinesin database.
+            Calculate median of ranked scores and insert results.
 Author:     Jennifer J. Stiens
             j.j.stiens@gmail.com
             https://github.com/jenjane118/kinesin_db
@@ -42,6 +43,7 @@ import pymysql
 import config_home
 import config_kinesin
 import Bio.Data.IUPACData
+import median_score as med
 
 #*****************************************************************************
 def parseVep2(my_gene, vep_file):
@@ -356,6 +358,10 @@ if __name__ == "__main__":
     results = fathmmResultsParser('fathmm_results.txt')
     rows = fathmmInsert(results, db)
     print(rows)
-    results2 = parseClinvar(mygene, 'clinvar_result.txt')
+    results2 = parseClinvar(gene, 'clinvar_result.txt')
     successful = clinvarUpdate(results2, db)
     print(successful)
+    median_column = med.getScores(db)
+    medians = med.calcMedian(median_column)
+    rows = med.insertMedians(medians, 'home')
+    print(rows)
