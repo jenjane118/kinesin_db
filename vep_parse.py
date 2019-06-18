@@ -50,11 +50,14 @@ import config_kinesin
 
 def vepScores(gene, database):
     """This function queries the kinesin database for list of mutations and formats
-    for the VEP webservice. (https://www.ensembl.org/Tools/VEP). NOT reliable, as
-    genomic coordinates are different in COSMIC vs TCGA.
+    for the VEP webservice, (https://www.ensembl.org/Tools/VEP). The genomic coordinates
+    do differ between Cosmic and TCGA, but as insertion relies on parsing amino acid
+    substitution in results file, it is irrelevant.
+
     Input                   gene                       desired gene ('KIF11')
                             database                   kenobi or home database
     Output                  vep_list                   list of mutations in HGNS format
+                                                       (e.g. 'chr10:g.92613438A>T')
     """
 
     # Connect to MySQL Database (kinesin on kenobi)
@@ -101,7 +104,7 @@ def vepScores(gene, database):
 
 def parseVep2(my_gene, vep_file):
     """ Parse VEP flatfile results (downloaded after using webservice (https://www.ensembl.org/Multi/Tools/VEP?db=core)
-    with file from getVepInput function) to get all predictions and scores for entry to kinesin
+    with file from vepScores function) to get all predictions and scores for entry to kinesin
     database impact table.
 
     Input               my_gene                 Gene of interest (KIF11)
@@ -132,7 +135,7 @@ def parseVep2(my_gene, vep_file):
                         aa1 = match.group(1)
                         aa2 = match.group(2)
                         mutation        = str(aa1+resnum+aa2)
-                genomic         = row['#Uploaded_variation']       
+                genomic         = row['#Uploaded_variation']
                 sift            = row['SIFT']
                 if sift != 'NA':
                     s = re.compile(r'^(.*)\((.*)\)')
