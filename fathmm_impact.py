@@ -25,12 +25,12 @@ the algorithm was set for '1.0', which is slightly more sensitive and less-speci
 
 Usage:
 ======
-vep_parse                SELF
+fathmm_impact                SELF
 
 Revision History:
 =================
 V1.0    14.05.19        Initial                                     By: JJS
-
+V1.1    18.05.19        Re-named fathmm_impact.py                       JJS
 """
 
 #
