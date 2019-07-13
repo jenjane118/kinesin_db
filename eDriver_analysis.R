@@ -117,6 +117,28 @@ row.names(tissue_mis) <- c('other', 'motor', 'mt-bind')
 tissue_missense <- select(tissue_mis, -1)  #remove first column
 View(tissue_missense)
 
+######## pie chart of tissue type#############
+total_vec<-NULL
+for (i in 2:10){
+  total_sum<- sum(tissue_missense[,i], na.rm=TRUE)
+  total_vec<-c(total_vec, total_sum)
+}
+total_vec
+
+pie(total_vec, main='Distribution of mutations by tissue type', col=rainbow(9, start=.7, end=.3),
+    labels=c('colorectal', 'uterus', 'prostate', 'skin', 'breast', 'lung', 'urinary', 'upper resp', 'liver'))
+
+######## plot of tissue type ###########
+
+mut_matrix<-matrix(total_vec, nrow = 1, ncol = 9, byrow=FALSE)
+colnames(mut_matrix)<-c('colorectal', 'uterus', 'prostate', 'skin', 'breast', 'lung', 'urinary', 'upper resp', 'liver')
+mut_matrix
+tissue_plot <-barplot(mut_matrix[1,], main = 'Distribution of mutations by tissue type', 
+                 ylab = 'number of mutations', ylim = c(0, 50), xlab = 'tissue type', 
+                 axes=FALSE, cex.names= 0.6, col=rainbow(9, start=.7, end=.3))
+axis(1, pos=0, labels=FALSE, tick=FALSE, cex.axis=0.8)
+axis(2, at = seq(0, 40, 10), pos = 0, cex.axis=0.8)
+
 ######### binomial test
 ## binomial test to identify 'driver PFRs'
 ## evaluate distr of missense mutations within regions compared to random distr
@@ -171,8 +193,8 @@ View(res_adj)
 
 
 ## intrinsically disordered regions can include important func sites such as phosphorylation
-#     sites or ppi mediators/regulators. Identified with in eDriver suppl data (used Foldindex)
-
+#     sites or ppi mediators/regulators. Identified with e-Driver suppl data (used Foldindex)
+#     (http://github.com/eduardporta/e-Driver.git)
 ## use idr1 751-885 to see if enriched (24 mutations)
 idr1 <- eDriver(24, 179, 135, 1056)
 idr1
@@ -181,8 +203,7 @@ idr1
 idr2 <- eDriver(14, 179, 74, 1056)
 idr2
 #[1] 0.3750199  
-## idr3 937-1056
-
+## idr3 937-1056 overlaps with mt-binding region
 
 # use only with colon mutations (five mutations from colon)
 idr1_colon <- eDriver(5, 32, 135, 1056)

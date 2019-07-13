@@ -1,11 +1,77 @@
 ## Make some plots showing tissue distribution, 'consequence', domain, source info
+
+
+
 #install.packages("ggplot2")
 library(RMySQL)
 library(plyr)
 library(ggplot2)
 library(dplyr)
-#fetching some data (domain breakdown)
 
+### Mutations by source
+mydb = dbConnect(MySQL(), user='root', password='password', dbname='kinesin', host='localhost', port=3306)
+
+dbListTables(mydb)
+dbListFields(mydb, 'source_info')
+rs <- dbSendQuery(mydb, "SELECT mutation_id source_db from kinesin.source_info
+                  GROUP by source_db;")
+db_distr <- dbFetch(rs, n=-1)
+db_distr
+#clear result set
+dbClearResult(rs)
+
+rs <- dbSendQuery(mydb, "SELECT SQL_CALC_FOUND_ROWS
+                  mutation_id
+                  FROM source_info 
+                  GROUP by mutation_id
+                  HAVING COUNT(*) > 1;")
+dbClearResult(rs)
+rs <- dbSendQuery(mydb, "SELECT FOUND_ROWS();")
+both <- dbFetch(rs, n=-1)
+dbClearResult(rs)
+
+both
+source_db <- c('BOTH')
+
+both_db <- 52
+db_sources <- c(165/257, 144/257)
+install.packages('VennDiagram')
+library(VennDiagram)
+draw.pairwise.venn(165, 144, cross.area = 52, category = c('COSMIC', 'GDC'),
+                    fill = c('blue','red'), lty='blank', cat.default.pos = 'text',
+                    cat.pos = c(200, 200))
+
+grid.newpage()
+## Mutations by consequence typ
+mydb=mydb = dbConnect(MySQL(), user='root', password='password', dbname='kinesin', host='localhost', port=3306)
+rs <- dbSendQuery(mydb, "SELECT consequence, COUNT(*) FROM kinesin.mutation 
+                  GROUP by consequence;")
+cons_muts <- dbFetch(rs, n=-1)
+#clear result set
+dbClearResult(rs)
+#disconnect from database
+dbDisconnect(mydb)
+
+cons_muts
+missense <- cons_muts[3,2]
+nonsense <- cons_muts[4,2]
+synonymous <- cons_muts[7,2]
+splice_var <- sum(cons_muts[5:6,2])
+frameshift <- cons_muts[1,2]
+inframe<- cons_muts[2,2]
+total <- sum(cons_muts[1:7, 2])
+pie_slices <- c(missense, nonsense, synonymous, splice_var, frameshift, inframe)
+pie_slices
+#pie chart
+cons=c('missense', 'nonsense', 'synonymous', 'splice variants', 'frameshift', 'other')
+pie(pie_slices, labels=cons, col = c("purple", "violetred1", "green3", "cornsilk",
+                "cyan", "white"), main='Distribution of consequence type')
+
+    
+
+##Mutations by domain and domain length
+
+#fetching some data (domain breakdown)
 # connect to database
 mydb = dbConnect(MySQL(), user='root', password='password', dbname='kinesin', host='localhost', port=3306)
 
@@ -53,19 +119,18 @@ axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
 
 ## plot bars from mutations/length on same graph
 mut_nos <- c(155, 76, 26)
-dom_mat <- rbind(dom_lens, mut_nos)
+mis_nos <- c(106, 56, 17)
+dom_mat <- rbind(mis_nos, mut_nos)
 colnames(dom_mat)<-c('other', 'motor', 'mt-bind')
 dom_mat
 
 par(mfrow=c(1,1))
-mix_bar <- barplot(dom_mat, beside=TRUE, main = "Relative mutation distribution and length", 
-                   xlab = "Domains", col=c('red', 'green'), axes=FALSE, 
-                   ylab = "Length/Mutations")
-legend("topright",
-       c("Domain length","no. mutations"),
-       fill = c("red","green")
-)
-axis(side=2, at=seq(0,700, 100), pos=0.30)
+mix_bar <- barplot(dom_mat, beside=TRUE, main = "Mutation distribution by domain", cex.main=1, 
+                   col=c('red', 'green'), axes=FALSE, cex.names=0.6,
+                   ylab = "No. of Mutations", ylim=c(0,180))
+legend("topright",c("Missense","Total"), cex=0.7, 
+                  fill = c("red","green"))
+axis(side=2, at=seq(0,180, 20), pos=0.30, cex.axis=0.6)
 axis(side=1, pos=0, tick=FALSE, labels=FALSE)
 
 # mutation rate: ratio of total mutations/ domain length (includes synonymous mutations)
@@ -73,6 +138,11 @@ par(mfrow=c(1,1))
 rat_plot <- plot(dom_lens, domain_muts[,1], type='o', xlab='Number of residues per domain', 
                  ylab='Number of mutations per domain', 
                 main='Number of mutations proportional to domain length')
+
+
+
+
+
 #binomial test to see if any enrichment in domains vs expected
 # edriver function from script
 eDriver <- function (MR, TM, LR, LP) {
@@ -126,6 +196,7 @@ freq_plot <-plot(freq_matrix, type='h',main = 'Frequency/position of mutations i
                 ylab = 'number of mutations', ylim = c(0, 4), xlab = 'residue position', xlim = c(0, 1060))
 
 ## plot number of mutations/tissue_type
+## will require categorising (have done this in eDriver_analysis.R)
 mydb = dbConnect(MySQL(), user='root', password='password', dbname='kinesin', host='localhost', port=3306)
 
 # large intestine/colon/rectum
@@ -165,11 +236,12 @@ domain_missense<- select(domain_missense, -1)
 dom_missense<-data.matrix(domain_missense)
 
 #plot domain categories and number of missense mutations
-par(mfrow=c(1,2), cex.lab=0.8)
-colon_mis_bar <- barplot(colon_dom_matrix, space=1.0, width=0.5, beside=TRUE, cex.names= 0.5, 
-                     names.arg = names, col='blue', density= 10, main = 'Colon missense by domain', 
-                     ylab = 'missense mutations', ylim = c(0, 30), axes=FALSE)
-axis(side = 2, at = seq(0, 30, 5), pos = 0.30)
+par(mfrow=c(1,2))
+colon_mis_bar <- barplot(colon_dom_matrix, space=1.0, width=0.5, beside=TRUE, cex.names= 0.6, 
+                     names.arg = names, col='blue', density= 10, main = 'Missense Colorectal Mutations',
+                     cex.main=0.8,
+                     ylab = 'number of mutations', ylim = c(0, 30), axes=FALSE)
+axis(side = 2, at = seq(0, 30, 5), pos = 0.30, cex.axis=0.8)
 axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
 
 domain_mis_bar <-barplot(dom_missense, space=1, width=0.5, beside=TRUE, cex.names=0.5, names.arg = names, col=rainbow(25),
@@ -178,6 +250,33 @@ domain_mis_bar <-barplot(dom_missense, space=1, width=0.5, beside=TRUE, cex.name
 axis(side = 2, at = seq(0, 200, 10), pos = 0.30)
 # add x-axis with offset positions, with ticks.
 axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
+
+## plot of no missense v domain length
+par(mfrow=c(1,1))
+rat_plot <- plot(dom_lens, dom_missense[,1], 
+                 col='blue', axes=FALSE,
+                 ylim = c(0, 120), xlim=c(100, 600),
+                 xlab='Number of residues per domain', 
+                 ylab='Number of missense mutations per domain', 
+                 main='Relationship between number of missense mutations and domain length', cex.main=0.8)
+axis(side=2, at = seq(0, 100, 20), pos=90, cex.axis=0.8)
+axis(side=1, pos=0, tick=TRUE, cex.axis=0.8)
+text(130,30, labels="mt-binding", cex=0.6, pos=1, col="red")
+text(330, 69, labels='motor', cex=0.6, pos=1, col='red')
+text(590, 105, labels='other', cex=0.6, pos=1, col='red')
+
+#correlation test
+cor(dom_lens, dom_missense[,1], method='kendall')
+#[1] 1
+cor(dom_lens, dom_missense[,1], method='spearman')
+#[1] 1
+
+lm(dom_missense[,1] ~ dom_lens)
+#Coefficients:
+#(Intercept)     dom_lens  
+#-10.9311       0.2006  
+abline(-10.9311, 0.2006)
+
 
 colon_matrix
 ## with all mutations total/colon
@@ -192,19 +291,48 @@ colon_total <- select(colon_total, -1)  #remove first column
 colon_total
 colon_total_matrix<-data.matrix(colon_total)
 colon_total_matrix
-par(mfrow=c(1,2), cex.lab=0.8)
-colon_total_bar <- barplot(colon_total_matrix, space=1.0, width=0.5, beside=TRUE, cex.names= 0.5, 
-                     names.arg = names, col='blue', density= 10, main = 'Colon mutations by domain', 
-                     ylab = 'mutations', ylim = c(0, 30), axes=FALSE)
-axis(side = 2, at = seq(0, 30, 5), pos = 0.30)
+par(mfrow=c(1,2))
+colon_total_bar <- barplot(colon_total_matrix, space=1.0, width=0.5, beside=TRUE, cex.names= 0.6, 
+                     names.arg = names, col='blue', density= 10, main = 'All Colorectal Mutations', 
+                     cex.main=0.8,
+                     ylab = 'number of mutations', ylim = c(0, 30), axes=FALSE)
+axis(side = 2, at = seq(0, 30, 5), pos = 0.30, cex.axis=0.8)
 axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
 
-domain_bar<-barplot(dom_matrix, space=1, width=0.5, beside=TRUE, cex.names=0.5, names.arg = names, col=rainbow(25),
-                    main = 'Total mutations by domain', ylab = 'mutations',
+par(mfrow=c(1,1))
+domain_bar<-barplot(dom_matrix, space=1, width=0.5, beside=TRUE, cex.names=0.6, names.arg = names, col=rainbow(25),
+                    main = 'Total mutations by domain', cex.main=0.8, ylab = 'mutations',
                     axes = FALSE)
-axis(side = 2, at = seq(0, 200, 10), pos = 0.30)
+axis(side = 2, at = seq(0, 200, 10), pos = 0.30, cex.axis=0.6)
 # add x-axis with offset positions, with ticks.
 axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
+
+
+colon_dom_matrix
+#plot length of domain vs number of mutations for colon missense
+col_rat_plot <- plot(dom_lens, colon_dom_matrix[,1],
+                 col='blue', axes=FALSE,
+                 ylim = c(0, 25), xlim=c(100, 600),
+                 xlab='Number of residues per domain', 
+                 ylab='Number of missense mutations per domain', 
+                 main='Relationship between number of missense mutations and domain length in colorectal tissue', cex.main=0.7)
+axis(side=2, at = seq(0, 25, 5), pos=90, cex.axis=0.8)
+axis(side=1, pos=0, tick=TRUE, cex.axis=0.8)
+text(130, 5, labels="mt-binding", cex=0.6, pos=1, col="red")
+text(330, 21, labels='motor', cex=0.6, pos=1, col='red')
+text(590, 15, labels='other', cex=0.6, pos=1, col='red')
+
+lm(colon_dom_matrix[,1] ~ dom_lens)
+#Coefficients:
+#(Intercept)     dom_lens  
+#3.39559      0.02066  
+abline(3.39559, 0.02066, col='black')
+
+## correlation
+cor(dom_lens, colon_dom_matrix[,1], method="spearman")
+# [1] 0.5
+cor(dom_lens, colon_dom_matrix[,1], method="kendall")
+# [1] 0.3333333
 
 
 #clear result set
@@ -328,7 +456,7 @@ ks.test(ratio_matrix[,1], ratio_matrix[,2])
 # D = 0.75, p-value = 0.2286
 # can't reject null, may be from same distribution
 
-## can i use wicoxon signed ranks test in this instance?
+## can i use wilcoxon signed ranks test in this instance?
 wilcox.test(ratio_matrix[,1], ratio_matrix[,2], paired=TRUE)
 # V = 7, p-value = 0.625
 # can't reject null
