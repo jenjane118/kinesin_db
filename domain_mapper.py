@@ -27,8 +27,8 @@ domain_mapper           SELF
 
 Revision History:
 =================
-V1.0    29.01.10        Initial version                             By: JJS
-
+V1.0    29.01.19        Initial version                             By: JJS
+V1.1    13.07.19        Change domain names                             JJS
 """
 
 # ******************************************************************************
@@ -96,7 +96,7 @@ def domainMapper(mutation):
     It uses uniprot id P52732
     Input               mutation            mutated amino acid residue
     Output              domain_name         name of relevant domain
-                                            'motor', 'microtubule-binding', 'UNK'
+                                            
     """
     import re
 
@@ -105,7 +105,7 @@ def domainMapper(mutation):
         if x in range(24,359):
             domain_dict[str(x)] = 'kinesin motor'
         elif x in range(916, 1053): #> 915 and x < 1054:
-            domain_dict[str(x)] = 'microtubule-binding'
+            domain_dict[str(x)] = 'tail-binding'
         elif x in range(751, 885):
             domain_dict[str(x)] = 'idr1'
         elif x in range(422, 496):
