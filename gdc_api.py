@@ -97,4 +97,4 @@ if __name__ == "__main__":
 
     tgdc = IdReader('tgdc_mutationset.tsv')
 
-    tissue_data = GdcRequest(tgdc, 'results.json')
+    tissue_data = GdcRequest('data.json', 'results.json')
