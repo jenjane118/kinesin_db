@@ -90,7 +90,7 @@ dbDisconnect(mydb)
 
 domain_muts
 # plots of mutation numbers by domain and domain lengths
-names<-c('other', 'motor', 'mt-bind')
+names<-c('other', 'motor', 'tail-bind')
 row.names(domain_muts) <- names
 
 domain_muts <- select(domain_muts, -1)  #remove first column
@@ -121,7 +121,7 @@ axis(side = 1, pos = 0, tick = TRUE, labels=FALSE)
 mut_nos <- c(155, 76, 26)
 mis_nos <- c(106, 56, 17)
 dom_mat <- rbind(mis_nos, mut_nos)
-colnames(dom_mat)<-c('other', 'motor', 'mt-bind')
+colnames(dom_mat)<-c('other', 'motor', 'tail-bind')
 dom_mat
 
 par(mfrow=c(1,1))
@@ -167,8 +167,8 @@ plot(dom_lens, p_vals, type='o')
 
 ## pie
 par(mfrow=c(1,2))
-pie(dom_matrix[,1], main='Number of mutations by domain region', labels=c('other', 'motor', 'mt-bind'))
-pie(len_matrix[,1], main='Relative length of domains of KIF11', labels=c('other', 'motor', 'mt-bind'))
+pie(dom_matrix[,1], main='Number of mutations by domain region', labels=c('other', 'motor', 'tail-bind'))
+pie(len_matrix[,1], main='Relative length of domains of KIF11', labels=c('other', 'motor', 'tail-bind'))
 
 # graph positions of all mutations (x axis=residue position/y axis 0-5 mutations, color by tissue)
 # connect to database
@@ -261,7 +261,7 @@ rat_plot <- plot(dom_lens, dom_missense[,1],
                  main='Relationship between number of missense mutations and domain length', cex.main=0.8)
 axis(side=2, at = seq(0, 100, 20), pos=90, cex.axis=0.8)
 axis(side=1, pos=0, tick=TRUE, cex.axis=0.8)
-text(130,30, labels="mt-binding", cex=0.6, pos=1, col="red")
+text(130,30, labels="tail-binding", cex=0.6, pos=1, col="red")
 text(330, 69, labels='motor', cex=0.6, pos=1, col='red')
 text(590, 105, labels='other', cex=0.6, pos=1, col='red')
 
@@ -318,7 +318,7 @@ col_rat_plot <- plot(dom_lens, colon_dom_matrix[,1],
                  main='Relationship between number of missense mutations and domain length in colorectal tissue', cex.main=0.7)
 axis(side=2, at = seq(0, 25, 5), pos=90, cex.axis=0.8)
 axis(side=1, pos=0, tick=TRUE, cex.axis=0.8)
-text(130, 5, labels="mt-binding", cex=0.6, pos=1, col="red")
+text(130, 5, labels="tail-binding", cex=0.6, pos=1, col="red")
 text(330, 21, labels='motor', cex=0.6, pos=1, col='red')
 text(590, 15, labels='other', cex=0.6, pos=1, col='red')
 
@@ -381,7 +381,7 @@ total_dnds
 
 dNdS<- rbind(dNds, total_dnds)
 dNdS
-rownames(dNdS)<-c('other', 'motor', 'mt-bind', 'total')
+rownames(dNdS)<-c('other', 'motor', 'tail-bind', 'total')
 dNdS
 
 #         synon non-syn ratio
@@ -417,7 +417,7 @@ total_col
 dNds_col <- cbind(syn_col, non_col)
 dNds_col <- rbind(dNds_col, total_col)
 colnames(dNds_col)<-c('synon', 'non-syn')
-rownames(dNds_col)<-c('other', 'motor', 'mt-bind', 'total')
+rownames(dNds_col)<-c('other', 'motor', 'tail-bind', 'total')
 dNds_col
 ratio <- NULL
 for (i in 1:length(dNds_col)) {
@@ -429,15 +429,23 @@ dNdS[,3]
 ratio
 ratio_matrix <- cbind(dNdS[,3], ratio)
 colnames(ratio_matrix) <- c('all', 'colon')
-rownames(ratio_matrix) <- c('other', 'motor', 'mt-bind', 'total')
+rownames(ratio_matrix) <- c('other', 'motor', 'tail-bind', 'total')
 ratio_matrix
 
 par(mfrow=c(1,1))
-ratio_plot <- plot(ratio_matrix, xlim=c(0,10), ylim=c(0,10), ylab=c('dNdS ratio colon'),
-     xlab=c('dNdS ratio overall'))
-abline(a=0, b=1)
-text(ratio_matrix, labels = row.names(dNds_col[1:4,]), pos = 4, cex=0.8)
-title(main=c('dNdS ratio Colon v. All tissues'), sub=c('(non-bootstrapped)'), cex.sub=0.6)
+ratio_plot <- plot(ratio_matrix[1:3,2], ratio_matrix[1:3,1], xlim=c(0,10), ylim=c(0,10), xlab=c('dNdS ratio colon'),
+     ylab=c('dNdS ratio overall'))
+lm(ratio_matrix[1:3,1] ~ ratio_matrix[1:3,2])
+#Coefficients:
+#(Intercept)  ratio_matrix[, 2]  
+#4.2214                0.2697 
+abline(4.2214, 0.2697, col='black')
+
+text(ratio_matrix[1:3,2], ratio_matrix[1:3,1], labels = row.names(ratio_matrix[1:4,]), pos=4, cex=0.8)
+title(main=c('dNdS ratio All tissues vs colon'), sub=c('(non-bootstrapped)'), cex.sub=0.6)
+
+cor(ratio_matrix[1:3,2], ratio_matrix[1:3,1], method='kendall')
+#[1] 0.3333333
 
 #         synon non-syn ratio
 # other       7      13  1.86
@@ -449,26 +457,34 @@ title(main=c('dNdS ratio Colon v. All tissues'), sub=c('(non-bootstrapped)'), ce
 #   the dN/dS ratio of mutation overall is actually lower than for the protein as a whole
 #   (3.30 vs 4.20) and the difference within the regions is even more marked (ratio greater
 #   within motor region).
-
+ratio_matrix[1:3,1]
 
 ## perform kolgomorov-smirnov test to see if the ratios of colon vs overall are from same distribution
-ks.test(ratio_matrix[,1], ratio_matrix[,2])
-# D = 0.75, p-value = 0.2286
+ks.test(ratio_matrix[1:3,2], ratio_matrix[1:3,1])
+# D = 0.66667, p-value = 0.6
 # can't reject null, may be from same distribution
 
-## can i use wilcoxon signed ranks test in this instance?
-wilcox.test(ratio_matrix[,1], ratio_matrix[,2], paired=TRUE)
-# V = 7, p-value = 0.625
-# can't reject null
+## can i use wilcoxon signed ranks test in this instance (paired values)?
+wilcox.test(ratio_matrix[1:3,2], ratio_matrix[1:3,1], paired=TRUE)
+# V = 1, p-value = 0.5
+# can't reject null, may come from same distribution
 
-#mann whitney u test--non-paired, must be independent (one is subset of other, not indep)
-ratio_matrix
+#mann whitney u test--non-paired, must be independent (NOT right test)
+wilcox.test(ratio_matrix[1:3,2], ratio_matrix[1:3,1], paired=FALSE)
+# W = 2, p-value = 0.4
 
+
+
+
+
+
+## this is just jibberish here
 ratio_matrix[,1]
 ratio_matrix[,2]
-## bootstrap ratios colon vs. total 
-syn_col<-sum(dNds_col[,1])
-non_col<-sum(dNds_col[,2])
+
+## bootstrap ratios for each domain 
+syn_col<-sum(dNds_col[1:3,1])
+non_col<-sum(dNds_col[1:3,2])
 syn_tot<-sum(dNds[,1])
 syn_tot<-sum(dNds[,2])
 
@@ -478,8 +494,8 @@ median_tot<-NULL
 median_col<-NULL
 par(mfrow=c(1,1))
 for (i in 1:100){
-  boot_tot<-sample(ratio_matrix[,1], replace=TRUE)
-  boot_col<-sample(ratio_matrix[,2], replace=TRUE)
+  boot_tot<-sample(ratio_matrix[1:3,1], replace=TRUE)
+  boot_col<-sample(ratio_matrix[1:3,2], replace=TRUE)
   median_tot <- c(median_tot, median(boot_tot))
   median_col <- c(median_col, median(boot_col))
   difference <- c(difference, median(boot_tot)-median(boot_col))

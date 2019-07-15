@@ -113,7 +113,7 @@ tissue_mis <- merge(tissue_mis, urinary_mis, all.x=TRUE)    #will sub in na for 
 tissue_mis <- merge(tissue_mis, upres_mis, all.x=TRUE)
 tissue_mis <- merge(tissue_mis, liver_mis, all.x=TRUE)
 
-row.names(tissue_mis) <- c('other', 'motor', 'mt-bind')
+row.names(tissue_mis) <- c('other', 'motor', 'tail-bind')
 tissue_missense <- select(tissue_mis, -1)  #remove first column
 View(tissue_missense)
 
@@ -168,7 +168,7 @@ for (j in 1:10) {
     p_vals    <- c(p_vals, p_mr_mt)
   }
   if (j==1) {
-    res_missense <- data.frame(p_vals, row.names=c('other', 'motor', 'mt-bind'))
+    res_missense <- data.frame(p_vals, row.names=c('other', 'motor', 'tail-bind'))
   }else {
     res_missense[j] <- c(p_vals)
   }
@@ -183,7 +183,7 @@ p_adj_vals <- NULL
 for (i in 1:10) {
   p_adj_mt <- p.adjust(res_missense[,i], 'BH')
   if (i==1) {
-    res_adj <- data.frame(p_adj_mt, row.names=c('other', 'motor', 'mt-bind'))
+    res_adj <- data.frame(p_adj_mt, row.names=c('other', 'motor', 'tail-bind'))
   }else {
     res_adj[i] <- c(p_adj_mt)
   }
