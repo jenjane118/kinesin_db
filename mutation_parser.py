@@ -18,7 +18,7 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program parses gdc files (https://portal.gdc.cancer.gov) for kinesin database population.
+This program parses mutations from GDC(TCGA) and COSMIC for kinesin database population.
 
 Usage:
 ======
@@ -27,12 +27,12 @@ mutation_parser         SELF
 Revision History:
 =================
 V1.2    22.01.19        PyMysql insert data, create dictionary      By: JJS
-V1.3    23.01.19        Rewrite into functions                          JJS     
+V1.3    23.01.19        Rewrite into functions                          JJS
 V1.4    23.01.19        Added functions for source and impact           JJS
                         tables
 V1.5    25.01.19        Added file opening and gene specification to    JJS
-                        parseMutation function. Removed insert          
-                        functions to a new module. Renamed module 
+                        parseMutation function. Removed insert
+                        functions to a new module. Renamed module
                         (previously gdc_parser).
 V1.6    21.03.19        Changed tissue table to reflect multiple        JJS
                         samples for one mutation.
@@ -53,7 +53,8 @@ import csv
 
 # ******************************************************************************
 def parseGDC(gene, json_file):
-    """ Function to parse json files from Genomic Data Commons.
+    """ Function to parse gdc files (https://portal.gdc.cancer.gov) for kinesin
+    database population.
     Input                   file                file of JSON mutations
     Output                  mut_list  [0]       list of strings for mutation table
                             source_list  [1]    list of strings for source table
@@ -137,6 +138,7 @@ def parseGDC(gene, json_file):
 # ******************************************************************************
 def cosmicParser(my_gene, csv_file):
     """Function to parse mutation files from csv files from COSMIC database
+    (https://cancer.sanger.ac.uk/cosmic)
     Input               file                    csv file download
     Output              id_list                 list of mutation_id's
                         mutation_dict           dictionary of attributes of mutation and impact
@@ -208,7 +210,7 @@ def cosmicParser(my_gene, csv_file):
 
 # *************************************************************************************
 def combineImpact(gene, json_file, csv_file):
-    """Creates list of combined impact attributes with attributes from GDC .json and Cosmic .csv files.
+    """Creates list of combined impact attributes from GDC .json and Cosmic .csv files.
     Input           gene                gene name
                     json_file           gdc file in json format
                     csv_file            cosmic file in csv format
