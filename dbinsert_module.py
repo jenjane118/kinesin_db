@@ -18,8 +18,9 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program calls on parsing module functions and inserts attributes for tables in
-kinesin database.
+This program calls on parsing and functions from mutation_parser module and parsing and insertion functions from 
+impact_table module. Running program will insert attributes for all tables in kinesin database. 
+Must to do each table in sep function to avoid foreign key constraints.
 
 Usage:
 ======
@@ -31,21 +32,18 @@ V1.0    25.01.19        Initial version                                         
 V1.1    26.01.19        Complete insertion from both databases                      JJS
 V1.2    09.04.19        Update impact table with vep                                JJS
 V1.3    11.06.19        Update impact table with complete VEP, clinvar, fathmm      JJS
-
+V1.4    15.07.19        Added return number of rows to all functions                JJS
+                        Use impact_table module to streamline parsing functions
 """
 
 # ******************************************************************************
 # Import libraries
-
 import sys
 import pymysql
 import config_kinesin
 import config_home
-import mutation_parser
-import clinvar_impact
-import fathhm_impact
-import vep_parse
-
+import mutation_parser as mutation
+import impact_table as i
 
 # ******************************************************************************
 def insertCosmicSource(mutation_dict, database):
@@ -80,11 +78,14 @@ def insertCosmicSource(mutation_dict, database):
             source_list.append(source_line)
 
     # use list to populate source table
+    i = 0
     for x in source_list:
             rows = cursor.execute(sql_source, x)
+            i += 1
 
     cnx.commit()
     cnx.close()
+    return i
 
 # ******************************************************************************
 def insertMutation(mutations, database):
@@ -111,12 +112,16 @@ def insertMutation(mutations, database):
     sql_mutation = "INSERT INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
                    "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     gdc_mut = mutations[0]
+    i = 0
     for x in gdc_mut:
         if x[0] != "None": #  and x[4]=="missense_variant":
             rows = cursor.execute(sql_mutation, x)
+            i += 1
 
     cnx.commit()
     cnx.close()
+    return i
+
 # ******************************************************************************
 def insertSource(mutations, database):
     """Inserts entry into source table.
@@ -141,14 +146,16 @@ def insertSource(mutations, database):
 
     sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
     gdc_source = mutations[1]
+    i = 0
     for x in gdc_source:
         if x[2] != "None": #  and x[4]=="missense_variant":
             rows = cursor.execute(sql_source, x)
-
+            i += 1
     cnx.commit()
     cnx.close()
-# ******************************************************************************
+    return i
 
+# ******************************************************************************
 def insertCombinedImpact(impact, database):
     """Inserts entry into impact table.
     Input               impact                  list of combined entries for impact table
@@ -184,7 +191,6 @@ def insertCombinedImpact(impact, database):
     return  i
 
 # ******************************************************************************
-
 def insertGdcImpact(mutations, database):
     """Inserts entry into impact table.
     Input               impact                  list of mutation attributes from gdc
@@ -220,7 +226,6 @@ def insertGdcImpact(mutations, database):
     return  i
 
 # ******************************************************************************
-
 def insertCosmicTissue(cos_tissue_list, database):
     """Inserts entry into tissue table.
     Input               mutation_tissue             list of mutation attributes from cosmic
@@ -249,18 +254,19 @@ def insertCosmicTissue(cos_tissue_list, database):
 
     tissue_line = []
     tissue_list = []
+    i = 0
     # use list to populate tissue table
     for x in cos_tissue_list:
         if x[0] != "None":
             rows = cursor.execute(sql_tissue, x)
-
+            i += 1
     cnx.commit()
     cnx.close()
+    return i
 
 # ******************************************************************************
-
 def insertCosmicMutation(mutation_dict, database):
-    """Inserts entry into mutation table. (have to do each table in sep function to avoid foreign key constraints)
+    """Inserts entry into mutation table.
     Input               mutation_dict       dictionary of attributes from Cosmic csv file
                         database            use kenobi or home database
     Output                                  inserts attributes into mutation table
@@ -304,12 +310,11 @@ def insertCosmicMutation(mutation_dict, database):
 
     cnx.commit()
     cnx.close()
-
     return i
 
 # ******************************************************************************
 def insertCosmicImpact(mutation_dict, database):
-    """Inserts entry into mutation table. (have to do each table in sep function to avoid foreign key constraints)
+    """Inserts entry into impact table.
     Input               mutation_dict       dictionary of attributes from Cosmic csv file
                         database            home or kenobi database
     Output                                  inserts attributes into impact table
@@ -348,12 +353,9 @@ def insertCosmicImpact(mutation_dict, database):
 
     cnx.commit()
     cnx.close()
-
     return i
 
-
 # ******************************************************************************
-
 def insertGdcTissue(tissue_list, database):
     """Inserts entry into impact table.
     Input               tissue_list             list of mutation attributes from gdc for tissue
@@ -394,14 +396,14 @@ def insertGdcTissue(tissue_list, database):
 
 if __name__ == "__main__":
 
-    gdc_att         = mutation_parser.parseGDC('KIF11', 'mutations.2019-01-23.json')
-    cosmic_mutation = mutation_parser.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
-    #impact_all      = mutation_parser.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
-    cos_tissue_list = mutation_parser.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
-    tissueGDC       = mutation_parser.tissueGDC('KIF11', 'results.json')
-    impact          = vep_parse.parseVep2('KIF11', 'vep_complete_results.txt')
-    fathmm_results  = fathhm_impact.fathmmResultsParser('fathmm_results.txt')
-    clinvar_results = clinvar_impact.parseClinvar('KIF11', 'clinvar_result.txt')
+    gdc_att         = mutation.parseGDC('KIF11', 'mutations.2019-01-23.json')
+    cosmic_mutation = mutation.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    #impact_all      = mutation.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
+    cos_tissue_list = mutation.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
+    tissueGDC       = mutation.tissueGDC('KIF11', 'results.json')
+    impact          = i.parseVep2('KIF11', 'vep_complete_results.txt')
+    fathmm_results  = i.fathmmResultsParser('fathmm_results.txt')
+    clinvar_results = i.parseClinvar('KIF11', 'clinvar_result.txt')
 
     db = 'home'
     # insert commands must be in this order
@@ -409,8 +411,8 @@ if __name__ == "__main__":
     insertCosmicMutation(cosmic_mutation, db)
     insertSource(gdc_att, db)
     insertCosmicSource(cosmic_mutation, db)
-    vep_parse.updateImpact2(impact, db)
-    fathhm_impact.fathmmInsert(fathmm_results, db)
-    clinvar_impact.clinvarUpdate(clinvar_results, db)
+    i.updateImpact2(impact, db)
+    i.fathmmInsert(fathmm_results, db)
+    i.clinvarUpdate(clinvar_results, db)
     insertCosmicTissue(cos_tissue_list, db)
     insertGdcTissue(tissueGDC, db)

@@ -213,7 +213,7 @@ def fathmmResultsParser(csv_file):
 #*****************************************************************************
 
 def fathmmInsert(results_dict, database):
-    """ This function uses list of clinvar attributes to update impact table in kinesin database.
+    """ This function uses dictionary of FATHMM scores and predictions to update impact table in kinesin database.
         Input               results_dict                    dict of attributes (mutation_id:prediction, score)
                             database                        which database used (home or kenobi)
         Output              count                           number of successfully updated rows in impact table
@@ -257,8 +257,7 @@ def fathmmInsert(results_dict, database):
 def parseClinvar(gene, csv_file):
     """This function parses Clinvar file (https://www.ncbi.nlm.nih.gov/clinvar) for clinical significance. This file
     includes all recorded mutations for the gene 'KIF11' that involve only a single gene. Most of these are germline
-    variants and won't be present in kinesin db of somatic mutations from cancer. It includes functions to parse the
-    output file from clinvar and update mysql database tables with clinical significance.
+    variants and won't be present in kinesin db of somatic mutations from cancer.
 
     Input               csv_file            file of Clinvar results returned from web query ('clinvar_result.txt')
     Output              cv_list             list of mutation identifier and clinical significance
