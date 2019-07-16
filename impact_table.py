@@ -351,7 +351,7 @@ if __name__ == "__main__":
     gene = 'KIF11'
     db = 'home'
 
-    impact = parseVep2(gene, 'vep_complete_results.txt')
+    impact = parseVep2(gene, 'VEP_new_results.txt')
     number = updateImpact2(impact, db)
     print(number)
     results = fathmmResultsParser('fathmm_results.txt')
@@ -362,5 +362,5 @@ if __name__ == "__main__":
     print(successful)
     median_column = med.getScores(db)
     medians = med.calcMedian(median_column)
-    rows = med.insertMedians(medians, 'home')
+    rows = med.insertMedians(medians, db)
     print(rows)

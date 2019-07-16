@@ -243,17 +243,17 @@ if __name__ == "__main__":
 
     gene = 'KIF11'
 
-    #input_list = vepScores(gene, 'home')
+    input_list = vepScores(gene, 'home')
 
-    #with open ('vep_input.txt', 'w') as outfile:
-    #    for x in input_list:
-    #       print(x, file=outfile)
+    with open ('vep_input.txt', 'w') as outfile:
+       for x in input_list:
+          print(x, file=outfile)
 
     # use mutations listed in file in vep webservice (or use command line request)
     # output from webservice in 'vep_complete_results.txt'
 
-    impact = parseVep2(gene, 'vep_complete_results.txt')
-    number = updateImpact2(impact, 'home')
-    print(number)
+   # impact = parseVep2(gene, 'vep_complete_results.txt')
+   # number = updateImpact2(impact, 'home')
+   # print(number)
 
 

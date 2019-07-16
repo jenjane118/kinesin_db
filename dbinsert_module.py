@@ -34,6 +34,7 @@ V1.2    09.04.19        Update impact table with vep                            
 V1.3    11.06.19        Update impact table with complete VEP, clinvar, fathmm      JJS
 V1.4    15.07.19        Added return number of rows to all functions                JJS
                         Use impact_table module to streamline parsing functions
+V1.5    16.07.19        Added median scores functions to complete insertion         JJS
 """
 
 # ******************************************************************************
@@ -44,6 +45,7 @@ import config_kinesin
 import config_home
 import mutation_parser as mutation
 import impact_table as i
+import median_score as med
 
 # ******************************************************************************
 def insertCosmicSource(mutation_dict, database):
@@ -396,23 +398,28 @@ def insertGdcTissue(tissue_list, database):
 
 if __name__ == "__main__":
 
-    gdc_att         = mutation.parseGDC('KIF11', 'mutations.2019-07-13.json')
+    db = 'home'
+
+    gdc_att         = mutation.parseGDC('KIF11', 'mutations.2019-07-13.json')   #uses mutation_parser module
     cosmic_mutation = mutation.cosmicParser('KIF11', 'V89_38_MUTANT.csv')
-    #impact_all      = mutation.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
     cos_tissue_list = mutation.tissueCosmic('KIF11', 'V89_38_MUTANT.csv')
     tissueGDC       = mutation.tissueGDC('KIF11', 'results.json')
-    impact          = i.parseVep2('KIF11', 'vep_complete_results.txt')
+    impact          = i.parseVep2('KIF11', 'vep_complete_results.txt')      #uses impact_table module
     fathmm_results  = i.fathmmResultsParser('fathmm_results.txt')
     clinvar_results = i.parseClinvar('KIF11', 'clinvar_result.txt')
 
-    db = 'home'
+
     # insert commands must be in this order
     insertMutation(gdc_att, db)
     insertCosmicMutation(cosmic_mutation, db)
     insertSource(gdc_att, db)
     insertCosmicSource(cosmic_mutation, db)
-    i.updateImpact2(impact, db)
+    i.updateImpact2(impact, db)                             # uses impact_table module
     i.fathmmInsert(fathmm_results, db)
     i.clinvarUpdate(clinvar_results, db)
     insertCosmicTissue(cos_tissue_list, db)
     insertGdcTissue(tissueGDC, db)
+
+    dict = med.getScores(db)                                # uses median_score module to query for scores
+    medians = med.calcMedian(dict)                          # calculate median scores
+    med.insertMedians(medians, db)                          # insert calculated medians
