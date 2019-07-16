@@ -18,7 +18,8 @@ Course:     MSc Bioinformatics, Birkbeck University of London
 _____________________________________________________________________________
 Description:
 ============
-This program parses gdc files tsv files (https://portal.gdc.cancer.gov) for use in API.
+This program parses gdc files (https://portal.gdc.cancer.gov) for 'ssmid' and uses 
+to make API requests for tissue and cancer type information.
 
 Usage:
 ======
