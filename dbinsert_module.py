@@ -404,7 +404,7 @@ if __name__ == "__main__":
     cosmic_mutation = mutation.cosmicParser('KIF11', 'V89_38_MUTANT.csv')
     cos_tissue_list = mutation.tissueCosmic('KIF11', 'V89_38_MUTANT.csv')
     tissueGDC       = mutation.tissueGDC('KIF11', 'results.json')
-    impact          = i.parseVep2('KIF11', 'vep_complete_results.txt')      #uses impact_table module
+    impact          = i.parseVep2('KIF11', 'VEP_new_results.txt')      #uses impact_table module
     fathmm_results  = i.fathmmResultsParser('fathmm_results.txt')
     clinvar_results = i.parseClinvar('KIF11', 'clinvar_result.txt')
 
