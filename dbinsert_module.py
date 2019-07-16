@@ -67,7 +67,7 @@ def insertCosmicSource(mutation_dict, database):
                               db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
+    sql_source = "INSERT IGNORE INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
 
     source_line = []
     source_list = []
@@ -109,7 +109,7 @@ def insertMutation(mutations, database):
                               db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_mutation = "INSERT INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
+    sql_mutation = "INSERT IGNORE INTO mutation (protein, resnum, genomic, coding, cds, mutation_type, consequence, " \
                    "gene_name, organism, domain) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     gdc_mut = mutations[0]
     i = 0
@@ -144,7 +144,7 @@ def insertSource(mutations, database):
                               db=config_home.database_config['dbname'])
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_source = "INSERT INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
+    sql_source = "INSERT IGNORE INTO source_info (source_id, source_db, mutation_id) VALUES(%s,%s,%s)"
     gdc_source = mutations[1]
     i = 0
     for x in gdc_source:
@@ -179,7 +179,7 @@ def insertCombinedImpact(impact, database):
 
     cursor = cnx.cursor(pymysql.cursors.DictCursor)
 
-    sql_impact = "INSERT INTO impact (mutation_id, vep, sift_prediction, polyphen_prediction, " \
+    sql_impact = "INSERT IGNORE INTO impact (mutation_id, vep, sift_prediction, polyphen_prediction, " \
                  "fathmm_score, fathmm_prediction) VALUES(%s,%s,%s,%s,%s,%s)"
     i = 0
     for x in impact:
@@ -396,10 +396,10 @@ def insertGdcTissue(tissue_list, database):
 
 if __name__ == "__main__":
 
-    gdc_att         = mutation.parseGDC('KIF11', 'mutations.2019-01-23.json')
-    cosmic_mutation = mutation.cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    gdc_att         = mutation.parseGDC('KIF11', 'mutations.2019-07-13.json')
+    cosmic_mutation = mutation.cosmicParser('KIF11', 'V89_38_MUTANT.csv')
     #impact_all      = mutation.combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
-    cos_tissue_list = mutation.tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
+    cos_tissue_list = mutation.tissueCosmic('KIF11', 'V89_38_MUTANT.csv')
     tissueGDC       = mutation.tissueGDC('KIF11', 'results.json')
     impact          = i.parseVep2('KIF11', 'vep_complete_results.txt')
     fathmm_results  = i.fathmmResultsParser('fathmm_results.txt')
