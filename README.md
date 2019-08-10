@@ -14,5 +14,5 @@ Moores and Maya Topf. It involves parsing COSMIC and TCGA databases for somatic 
 of genes, namely the human gene known as 'KIF11' or 'Eg5'. The relational database is a MySQL database and the other
 scripts are written in python. Statistical analysis is in R.
 
-Instructions on implementing and updating database are contained in 'db_implementation.pdf'
+Instructions on implementing and updating database are contained in 'user_instructions.pdf'
 
