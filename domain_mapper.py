@@ -29,6 +29,7 @@ Revision History:
 =================
 V1.0    29.01.19        Initial version                             By: JJS
 V1.1    13.07.19        Change domain names                             JJS
+V1.2    17.08.19        Made separate function for IDRs                 JJS
 """
 
 # ******************************************************************************
@@ -92,8 +93,9 @@ def getMutations(database):
 # ******************************************************************************
 
 def domainMapper(mutation):
-    """This function maps the amino acid mutation to a domain on the KIF11-Human pfam architecture.
-    It uses uniprot id P52732
+    """This function maps the amino acid mutation to a domain on the KIF11-Human pfam architecture
+    (Using uniprot id P52732).
+    
     Input               mutation            mutated amino acid residue
     Output              domain_name         name of relevant domain
                                             
@@ -106,10 +108,6 @@ def domainMapper(mutation):
             domain_dict[str(x)] = 'kinesin motor'
         elif x in range(916, 1053): #> 915 and x < 1054:
             domain_dict[str(x)] = 'tail-binding'
-        elif x in range(751, 885):
-            domain_dict[str(x)] = 'idr1'
-        elif x in range(422, 496):
-            domain_dict[str(x)] = 'idr2'
         else:
             domain_dict[str(x)] = 'coiled-coil/disorder'
 
@@ -127,6 +125,46 @@ def domainMapper(mutation):
 
 # *************************************************************************************
 
+def domainMapper2(mutation):
+    """This function maps the amino acid mutation to a domain on the KIF11-Human pfam architecture
+    (using uniprot id P52732) and includes idr's (intrinsically disordered regions can include
+    important functional sites such as phosphorylation sites or ppi mediators/regulators. Identified
+    with e-Driver suppl data (used Foldindex)(http://github.com/eduardporta/e-Driver.git).
+
+    Input               mutation            mutated amino acid residue
+    Output              domain_name         name of relevant domain
+
+    """
+    import re
+
+    domain_dict = {}
+    for x in range(1, 2000):
+        if x in range(24, 359):
+            domain_dict[str(x)] = 'kinesin motor'
+        elif x in range(916, 1053):  # > 915 and x < 1054:
+            domain_dict[str(x)] = 'tail-binding'
+        elif x in range(751, 885):
+            domain_dict[str(x)] = 'idr1'
+        elif x in range(422, 496):
+            domain_dict[str(x)] = 'idr2'
+        else:
+            domain_dict[str(x)] = 'coiled-coil/disorder'
+
+    # find residue number
+    residue_num = ''
+    r = re.compile(r'[A-Z]+(\d+)[^0-9]')
+    it = r.finditer(mutation)
+    for match in it:
+        residue_num = str(match.group(1))
+
+    if residue_num in domain_dict:
+        return domain_dict[residue_num]
+    else:
+        return 'UNK'
+
+
+# *************************************************************************************
+
 ########## main ############
 
 if __name__ == "__main__":
@@ -137,7 +175,7 @@ if __name__ == "__main__":
         idr1_list = []
         idr2_list = []
         for row in residue_list:
-            p = domainMapper(row)
+            p = domainMapper2(row)
             if p == 'idr1':
                 idr1_list.append(row)
             elif p == 'idr2':
