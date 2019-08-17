@@ -95,7 +95,7 @@ def getMutations(database):
 def domainMapper(mutation):
     """This function maps the amino acid mutation to a domain on the KIF11-Human pfam architecture
     (Using uniprot id P52732).
-    
+
     Input               mutation            mutated amino acid residue
     Output              domain_name         name of relevant domain
                                             
