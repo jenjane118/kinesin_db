@@ -37,6 +37,7 @@ V1.5    25.01.19        Added file opening and gene specification to    JJS
 V1.6    21.03.19        Changed tissue table to reflect multiple        JJS
                         samples for one mutation.
 V1.7    15.06.19        Debugged GDCTissue parser for residues >999     JJS
+V1.8    17.09.19        Changed COSMIC csv parsing for new release      JJS
 """
 
 # ******************************************************************************
@@ -150,31 +151,33 @@ def cosmicParser(my_gene, csv_file):
 
     # open csv file
     with open(csv_file) as file:
-        csv_reader = csv.reader(file, delimiter=',')
+        csv_reader = csv.DictReader(file, delimiter=',') #changed from original to make more useful for future updates
+
         # parse out info into attribute names
         for row in csv_reader:
             try:
-                gene_name       = row[0]
-                gene_number     = row[1]
-                genomic_id      = row[23]
+                gene_name       = row['GENE_NAME']
+                gene_number     = row[' ACCESSION_NUMBER']
+                genomic_id      = row[' MUTATION_GENOME_POSITION']
                 coding          = 'y'
-                protein         = row[18]
+                protein         = row[' MUTATION_AA']
                 # eliminate 'p.'
                 protein         = protein.replace('p.', '')
+                protein         = protein.replace('=', protein[0]) #new release uses '=' for synonymous changes
                 res_num          = ''
-                cds             = row[17]
+                cds             = row[' MUTATION_CDS']
                 #cds             = cds.replace('c.', '')
-                description     = row[19].lower()          # parse out type and consequence below
+                description     = row[' MUTATION_DESCRIPTION'].lower()          # parse out type and consequence below
                 organism        = 'Homo sapiens'
                 domain          = d.domainMapper(protein)   # calls domain mapping function
 
                 # source_info table
                 source_db       = 'COSMIC'
-                source_id       = row[16]
+                source_id       = row[' MUTATION_ID']
 
                 # impact table
-                fathmm_score    = row[27]
-                fathmm_pred     = row[28]
+                fathmm_score    = row[' FATHMM_SCORE']
+                fathmm_pred     = row[' FATHMM_PREDICTION']
 
             except NameError as e:
                 print("Error", e)
@@ -295,21 +298,22 @@ def tissueCosmic(gene, csv_file):
 
     # open csv file
     with open(csv_file) as file:
-        csv_reader = csv.reader(file, delimiter=',')
+        csv_reader = csv.DictReader(file, delimiter=',')
         # parse out info into attribute names
         for row in csv_reader:
             try:
-                gene_name   = row[0]
-                sample_id = row[5]
-                source_id = row[16]
-                mutation_id = row[18]
+                gene_name   = row['GENE_NAME']
+                sample_id = row[' ID_SAMPLE']
+                source_id = row[' MUTATION_ID']
+                mutation_id = row[' MUTATION_AA']
                 # eliminate 'p.'
                 mutation_id = mutation_id.replace('p.', '')
+                mutation_id = mutation_id.replace('=', mutation_id[0])  # new release uses '=' for synonymous changes
                 # tissue table
-                tissue_type = row[7]
-                cancer_type = row[12]
+                tissue_type = row[' PRIMARY_SITE']
+                cancer_type = row[' HISTOLOGY_SUBTYPE_1']
                 if cancer_type == 'NS':
-                    cancer_type = row[11]
+                    cancer_type = row[' PRIMARY_HISTOLOGY']
             except Error as e:
                 print("Error", e)
 
@@ -334,13 +338,24 @@ if __name__ == "__main__":
     #gdc_impact = gdc_att[2]
     # #print(gdc_att[0])
 
-    #cosmic_dict = cosmicParser('KIF11', 'V87_38_MUTANT.csv')
+    cosmic_dict = cosmicParser('KIF11', 'V90_38_MUTANT.csv')
+    cosmic_dict2 = cosmicParser('KIF11', 'V89_38_MUTANT.csv')
+    total_cosmic = []
+
+    for x in cosmic_dict2:
+        if x not in cosmic_dict:
+            total_cosmic.append(x)
+
+    # print(total_cosmic)
+
+
     #t_impact = combineImpact('KIF11', 'mutations.2019-01-23.json', 'V87_38_MUTANT.csv')
     #for x in t_impact:
 
-    #from collections import Counter
+    # from collections import Counter
 
-    # cosmic_tissue = tissueCosmic('KIF11', 'V87_38_MUTANT.csv')
+    cosmic_tissue = tissueCosmic('KIF11', 'V90_38_MUTANT.csv')
+    print(cosmic_tissue)
     #
     # ## checks for duplicates in an attribute
     # dup_list = []
@@ -364,25 +379,28 @@ if __name__ == "__main__":
 
 
     # i = 0
-    # j = 0
+    j = 0
     # for x in gdc_mut:
     #     if x[0] != "None":  # and x[4] == "missense_variant":
     #         i += 1
     #         #print(x[1])
-    # for y in cosmic_dict:
-    #     j += 1
-    #     #print(cosmic_dict[x][0])
+
+    for y in cosmic_dict:
+        j += 1
+        #print(cosmic_dict[y])
+    print(j)
     # print('The total number of mutations in GDC is: ', i, 'and total in cosmic is: ', j)
     #
 
-    tissueGDC = tissueGDC('KIF11', 'results.json')
-
-    dup_list = []
-    for x in tissueGDC:
-        dup_list.append(x[0])
-    print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
+    # tissueGDC = tissueGDC('KIF11', 'results.json')
     #
-    print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
+    # dup_list = []
+    # for x in tissueGDC:
+    #     dup_list.append(x[0])
+    # print(list(set([i for i in dup_list if dup_list.count(i) > 1])))
+    # #
+    # print(len(list(set([i for i in dup_list if dup_list.count(i) > 1]))))
+    #
+    # print(tissueGDC)
+    # print(len(tissueGDC))
 
-    print(tissueGDC)
-    print(len(tissueGDC))
