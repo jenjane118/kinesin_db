@@ -6,8 +6,6 @@ Kinesin mutation database project
 
 MSc in Bioinformatics, Birkbeck College, University of London
 
-j.j.stiens@gmail.com
-
 
 This is a thesis project for the MSc in Bioinformatics at Birkbeck College, University of London, supervised by Carolyn
 Moores and Maya Topf. It involves parsing COSMIC and TCGA databases for somatic mutations in cancer found in Kinesin-5
